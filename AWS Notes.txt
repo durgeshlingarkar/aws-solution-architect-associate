@@ -259,3 +259,12 @@ Cloud Watch
 
 
 *************************************************************************************************************************************************
+
+Placement group
+	1. A placement group is a logical grouping of instances within a single availability zone.Using placement groups enables applications to participate in a low latency ,10 Gbps network.Placement groups are recommended for applications that benefit from low network latency, high network throughput , or both
+	2. A placement group cant span across multiple AZs
+	3. The name u specify to ur placememt group must be unique within ur AWS account.
+	4. Only certain types of instances can be launched in placement group (Compute optimized,GPU,Memory optimized,Storage optimized)
+	5. AWS recommend homogenous instances (means instances of same size and same family) within placement group
+	6. You cant merge placement groups
+	7. You cant move an exiting instance in a placement group.You can create an AMI from your existing instance, and then launch a new instance from the AMI into a placement group. 
