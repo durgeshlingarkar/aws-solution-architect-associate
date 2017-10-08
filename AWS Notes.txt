@@ -1,0 +1,261 @@
+S3 Service :- 
+
+1. S3 is a object based storage.It allows u to upload files
+2. S3 is not for block storage.U cannot install operaitng system or a database.
+3. File size in S3 can be between 0 to 5 TB
+4. S3 has unlimited storage.
+5. Files are stored in buckets.Buckets are folders.
+6. S3 buckets have universal namespace.Names of the buckets from be unique globally.
+7. S3 bucket endpoint or URL convention is like - https://s3-<regionn>.amazonaws.com/<bucketname>
+8. Read/Write consitancy
+	8.1 Add Object - Read after write consistency for puts of new object.This means if u add a object and immediately try to access it.It ll be immediately availabe.
+	8.2 Modify or Delete Object - Eventual consistency for overwrite puts and delete,It means once u modify or delete an object and then immediatey try to access it.It may or may not be reflected immediately.
+9. Core fundamentals of S3.
+	9.1 Key (name of the object)
+	9.2 Value (Actual data)
+	9.3 Version id
+	9.4 Metadata (Data of data)
+	9.5 Access control lists
+10. Versioning
+	10.1 Stores all versions of an object(Including all writes and even if u delete an object)
+	10.2 You pay for each version of the object
+	10.3 Great backup tool
+	10.4 Once enabled cannont be disabled it can only be suspended.
+	10.5 Versioning integrates with life cycle rules
+	10.6 Versioning provides multi factor authentication delete capability to provide an additional layer of security
+
+11 Cross region replication
+	11.1 Requires versioning to be enabled on source bucket as well as on destination bucket.
+
+12 Life cycle management 
+	12.1 It can be used in conjuction wih versioning  or can be used independently
+	12.2 Can be applied to all current versions and previous versions
+	12.3 Rules for life cycle management 
+		12.3.1 Transition to standard infrequent access - File size to more than or equal to 128 kb and 30 days after the date of creation
+		12.3.2 Archive to glacier (30 days after moving into IA
+		12.3.3 You can also permanently delete objects using life cycle management rules
+
+13. Edge Location - Location where content is cached.This is seperate to AWS Region/AZ.Edge locations are not only read only.You can write or put object on them.Objects are cached in edge locations for TTL(Time to live).TTL is always secified in seconds.By default objects are cached for 24 hours.U can clear the cache but u ll be charged for that. 
+
+14. Origin - THis is the origin of all files that CDN ll distribute.It can be S3,EC2,ELB or Route53
+15. Distribution - THis is the name given to the CDN which consists of collection of Edge Locations
+16. Types of distribution
+	16.1 Web distribution (Typically used for websites)
+	16.2 RTMP (Used for media streaming)
+
+17. By default all newly creted buckets are private.
+18. Access control on buckets 
+	18.1 Bucket policies
+	18.2 Access control list
+19. S3 buckets can be confogured to create access logs.The logs can be logged in to another bucket of same account or any other account.
+20. When u write successfully to S3 , you get http 200 response code
+21. Files can be loaded in S3 faster by enabling multipart upload.
+22. Read S3 FAQ  
+
+
+* Storage Tiers/Classes
+1. S3 (Durable,Immediately available , frequently accessed) Durability of 99.999999999%
+2. S3 - IA(Infrequent Access) (Durable,Immediately available , Infrequently accessed) Durability of 99.999999999%
+3. Reduced Redundancy Storage (RRS) (Data that is easily reproduciable like thumbnails.) Durability of 99.99%
+4. Glacier (Not immediately available.Takes up to 3 to 5 hours before accessing.Cheapest storage tier.It is used to archive data)
+
+
+* Storage Gateways
+1. File Gateway (Only used for flat files.Not applicable for block storage like OS or databases.Nothing is stored on premises.Everything is stored on S3)
+2. Storage valumes (Used for blocked and flat file storage.The entire dataset is stored in local on premises data center and async to S3 & EBS.Eg For a finance analytics company they need to have lowest possibe latency hence every thing is available locally and also the data is critical hence backed up in AWS cloud)
+3. Cached Volumes (Used for block and flat file storage.The entire data set is stored on AWS EBS and S3.The most frequntly accessed data is then stored on premises data center.)
+4. Gateway Virtual Tape Library (VTL are mostly used for backups and used popular backup applications like Net Backup, Backup exec ,Veeam etc) 
+
+
+* Encrytion Types
+	1. In Transit	
+		1.1 SSL/TLS (HTTPS)
+	2. At rest
+		2.1 Server Side Encryption 
+			2.1.1 SSE - S3 (Managed encryption keys by AWS.256 bit encryption)
+			2.1.2 SSE - KMS (Key Management Service.Paid service.Provides envlope keys for encryption keys.Provision for logging to check who and when accessed the keys)
+			2.1.3 SSE - C (Customer managed encryption keys.AWS does not manage the encryption keys.)
+	3. Client side encryption - Encryption of data at client side then uploading the data in S3
+	
+
+* Snowball
+	1. Types
+		1.1 Standard Snowball - Snowball can import to S3 and export from S3.
+		1.2 Snowball Edge - Not just storage capacity but compute capacity as well.Can run lama functions.Its a portable aws datacenter
+		1.3 Snowmobile - Exabyte scale date transfer.100 Petabyte per snow mobile.
+
+* Static website hosting
+	1. Endpoint convention - https://<bucketname>.s3-website-<region>.amazonaws.com
+
+Note :- Read S3 FAQs
+
+**************************************************************************************************************************************************
+
+EC2 Service :- 
+
+1. Elastic Compute Cloud.Its the virtual servers in cloud of windows , linux etc
+2. EC2 Options 
+	2.1 On Demand - Allows u to pay fix rate by hour (or by second) with no commitment.Currently by seconds only for linux instances
+	2.2 Reserved - Provides u with the capacity reservation , and offer a significant discount on hourly charges for an instance.1 year or 3 years term
+		2.2.1 Standard RI (Reserved Instances) - Upto 75% off on demand
+		2.2.2 Convertible RI (Reserve Instances) -  Upto 54% off on demand.Capability to change the attributes of he RIs as lonmg as the exchange results in he creation of reserved instances of equal or greater value.
+		2.2.3 Scheduled RI (Reserved Instance) -  These are available to launch within the time windows u reserve.Allows u to match ur capacity reservation to a predictable recurring scheules that only requires a fraction of day , week or month
+	2.3 Spot - Enables u to bid whatever price u want for instance capacity,providing for even greater savings if ur applications have flexible start and end times.
+	2.4 Dedicated hosts - Physical EC2 server dedicated for ur use.It helps to reduce cost by allowing u to use your existing sever bound software licenses.
+	2.5 Usecases for On Demand 
+		2.5.1 Users who want low cost and flexibility if EC2
+		2.5.2 Application with short term,spiky or unpredictable workloads that cannot be interrupted 
+		2.5.3 Applications that are developed or tested on EC2 for the first time.
+	2.6 Usecases for Reserved 
+		2.6.1 Applications with steady state or predictable usage.
+		2.6.2 Applications that require reserved capacity
+		2.6.3 Users who are able to make upfront payments to further reduce computing cost
+3. Termination protection for EC2 instance is turned off by default,you must turn it on.
+4. On an EBS backed instance ,the default action is for the root EBS volume to be deleted when the instance is terminated.
+5. EBS root voulmes of your default AMI's cannot be encrypted.You can use third party tools (such as bit locker etc) to encrypt the root volume,or this can be done when creating AMIs in the AWS console or using the API.  		
+6. Additional EBS volumes can be encrypted.
+7. Commands to mount and unmount EBS volumes
+	7.1 Login to the linux ec2 instance using ssh
+	7.2 sudo su
+	7.3 lsblk
+	7.4 mkfs -t ext4 /dev/xvdf
+	7.5 mkdir <<directoryname>>	
+	7.6 mount /dev/xvdf /durgi
+	7.7 lsblk
+	7.8 cd /
+	7.9 umount /dev/xvdf
+8. Steps to upgrade the EBS volume attached to EC2
+	8.1 Unmount the volume 
+	8.2 Detach the volume
+	8.3 Create snapshot from the detached volume
+	8.4 Create new volume from the snapshot created.Upgrade the volume type
+	8.5 Attach the newly created volume to EC2
+	8.6 Mount the volume.
+	8.7 Hence the data in the already attached volume is retained and the type of vol/ume is also upgraded 	
+9. Meta data URL 
+		http://169.254.169.254/latest/meta-data/
+
+10. Bast Script
+		* #!/bin/bash
+		* yum update -y
+		* sudo su
+		* yum install httpd -y
+		* service httpd start
+		* chkconfig httpd on
+		* cd /home/www/html
+		* aws s3 cp s3://durgeshlingarkar-dr/welcome.html index.html			
+
+
+EBS Service :- 
+	1. Block based storage volumes
+	2. It can be attached to EC2 instances
+	3. EBS are placed in specific AZ
+	4. Automatically replicated to protect from failure.Note that they are not backed up in diff AZ but in same AZ
+	5. EBS Types
+		5.1 Genral Purpose SSD (GP2)
+			5.1.1 Used for balancing price and performace.
+			5.1.2 3 IOPS per GD with upto 10000 IOPS.Can burst upto 3000 IOPS
+		5.2 Provisioned IOPS SSD
+			5.1.2 Used for I/O intensive applications like large relational databases
+			5.1.3 Shoud be used if needed more then 10000 IOPS
+			5.1.4 Can provision upto 20000 IOPS per volume
+		5.3 Throughput Optimized HDD (ST1)
+			5.3.1 Used for big data,data warehousing, log procesing
+			5.3.2 Throughput Optimized HDD cannot be a boot volume.
+		5.4 Cold HDD (SC1)
+			5.4.1 Lowest cost storage for infrequent access
+			5.4.2 Typical usecase is fileserver
+			5.4.3 Cold HDD cannot be boot volumes
+		5.5 Magnetic (Standard)
+			5.5.1 Lowest cost per giga byte of ALL EBS volume types that is bootable.
+			5.5.2 Ideal for workloads where data is access infrequently and lowest storage is imp
+	6. You cannot mount one EBS volumne to multiple EC2 instances.For that u have to use EFS(Elastic File System)
+	7. On termination of EC2 instance the associated EBS is deleted by default.We can configure it to not to do so while launching EC2.
+	8. EBS volumes can be changed on the fly (except for the magnetic standard)
+	9. Best practice is to stop the ec2 instance and then change the volume
+	10. If you change the volumne on the fly you must wait for 67 hours before making any changes.
+	11. U have to scale EBS volumes up only 
+	12. Volumes must be in the same AZ as that of EC2 instances 
+	13. To create a snapshot for amazon EBS volumes that serves as root devices , you should  stop the instance before taking the snapshot.
+	14. Snapshots of encrypted volumes are encrypted automatically.
+	15. Volumes restored from encrypted snapshots are encrypted automatically.
+	16. You can share snapshots in market place only if they are not encrypted as the encrytion key is tied to ur AWS account.
+	17. The unencrypted snapshots can be shared with other AWS accounts or made public.
+	18 EBS Volumes vs Instance Store Volumes
+		18.1 All AMIs are categorized as either backed by AMAZON EBS or backed by instance store.
+		18.2 For EBS volumes ,The root device for an instance launched from the AMI is an Amazon EBS volume created from an amazon EBS snapshot.
+		18.3 For Instance Store Volumes,  The root device for an instance launched from the AMI is an instance store volumne created from a template stored in  Amazon S3.
+		18.4 Instance store volumes are sometimes called as Ephemeral Storage.
+		18.5 Instance store volumes cannot be stopped , if the underying host fails , you ll lose your data.
+		18.6 EBS backed instances can be stopped , You ll not lose the data on this instance if it is stopped.
+		18.7 You can reboot both instance store and EBS backed , You ll not lose your data.
+		18.8 With instance store ,by default the root volumes ll be deleted on termination.However, with EBS volumes you can tell AWS to keep the root device volume.
+
+
+
+
+*************************************************************************************************************************************************
+
+VPC 
+
+1. One subnet is equal to one AZ.One subnet cannot span across multiple AZs
+
+
+
+*************************************************************************************************************************************************
+Security Groups
+
+1. In security groups as soon as u add inbound rule , the respective outbound rule is added irrespective of explicit configuration of outbound rule.Whatever is allowed in it is allowed out as well.This means security groups stateful means if u add inboud rule it automatically adds outbound rule
+2.All inbound traffic is blocked by default
+3.All outbound traffic is allowed by default
+4. Changes to security groups takes effects immediately
+5.You can any number of EC2 instances within a security group.
+6. You can have multiple security groups attached to EC2 instances
+7. Security groups are stateful.It means if u create an inbound rule allowing traffic in , the traffic is automatically allowed back again
+8. You cannot block specific IP addresses using security groups , instead use Network access control lists
+9. You can specify allow rules but cannot deny rules
+10. 
+
+
+
+*************************************************************************************************************************************************
+RAID & Snapshot
+
+1. RAID - Stands for Redundant Array of Independent Disk.It means putting bunch of disks together which act as a single disk to the OS
+2. Types of RAID
+	2.1 RAID 0 - Striped, No Redundancy , Good Performance
+	2.2 RAID 1 - Mirrorred, Redundancy
+	2.3 RAID 5 - Good for reads ,bad for writes , AWS does not recommend ever putting RAID 5 on EBS
+	2.4 RAID 10 - Stripped and Mirrorred , Good Redundancy and Good Performance.
+3. Problem in taking snapshot of RAID Array - The snapshot excludes the data held in cache by the applications or the OS.This does not matter wen there is a single volumne.However, in a RAID setup there are multiple volumes with interdependacies which poses a problem
+4. How to take a snapshot of a RAID array
+	4.1 Stop the application from writing to disk
+	4.2 Flush all caches to the disk
+5. How to achieve the soutions mentioned in point 4
+	5.1 Freeze the file system
+	5.2 Unmount the RAID array
+	5.3 Stopping the associated EC2 instance  (This is the most easiest of all)	
+
+
+*************************************************************************************************************************************************
+ELB (Elastic Load Balancer) Service - 
+
+1. Instances managed by ELB are reported as InServie or OutOfService
+2. Health check checks the instances health by talking to it.
+3. ELB have their own DNS name.You are never given an IP address for ELB
+4. Read FAQ for classic ELB 
+
+*************************************************************************************************************************************************
+
+Cloud Watch
+
+1. Standard monitoring is 5 mins
+2. Detailed monitoring is 1 min
+3. With cloud watch u can create dashboards to see what is happening with ur AWS environment
+4. Allows u to set alarms that notify you when particular thresholds are hit.
+5. Cloudwatch events helps u to respond to state changes in AWS resources
+6. Cloud watch logs helps u to aggregate , monitor and store logs
+7. Cloudwatch is for logging and monitoring resources whereas cloudtrail is for auditing.
+
+
+*************************************************************************************************************************************************
