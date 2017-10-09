@@ -268,3 +268,20 @@ Placement group
 	5. AWS recommend homogenous instances (means instances of same size and same family) within placement group
 	6. You cant merge placement groups
 	7. You cant move an exiting instance in a placement group.You can create an AMI from your existing instance, and then launch a new instance from the AMI into a placement group. 
+
+*************************************************************************************************************************************************
+
+EFS (Elastic File System)
+
+1. Amazon Elastic File System is File storage service for Amazon EC2.
+2. EFS is easy to use and provides simple interface that allows u to create and configure file systems easily and quickly.
+3. With EFS,storage capacity is elastic , growing and shrinking automatically as u add and remove files, so ur applications have the storage they need, when they need it.
+4. We cannot mount one EBS volume to 2 or more EC2 instances , thats exactly what EFS allows us to do.
+5. EFS supports Network File System version 4 (NFSv4) protocol.
+6. You only pay for the storage u use (it means no pre provisioning is required) unlike EBS.
+7. EFS can scale up to petabytes
+8. EFS can support thousands of concurrent NFS connections
+9. Data is stored across multiple AZs within a region.
+10. EFS is block based storge as opposed to object based storage like the one in S3.We can put files in EFS and share it with other EC2 instances.
+11. EFS has read after write consistency just like S3. 	
+12. EFS usecase is, it is used as a file server.it acts as a shared repository whose files are accessed  by multiple EC2s.
