@@ -135,7 +135,7 @@ EC2 Service :-
 9. Meta data URL 
 		http://169.254.169.254/latest/meta-data/
 
-10. Bast Script
+10. Bash Script
 		* #!/bin/bash
 		* yum update -y
 		* sudo su
@@ -143,7 +143,24 @@ EC2 Service :-
 		* service httpd start
 		* chkconfig httpd on
 		* cd /home/www/html
-		* aws s3 cp s3://durgeshlingarkar-dr/welcome.html index.html			
+		* aws s3 cp s3://durgeshlingarkar-dr/welcome.html index.html
+
+11. EC2 Instances Type
+	11.1 D for Density.Speciality is Dense Storage.Use Case is Fileservers/Data Warehousing/Hadoop
+	11.2 R for RAM.Speciality is Memory optimized.Use Case is Memory Intensive Apps/DBs 
+	11.3 M for Main choice for general purpose apps.Speciality is General Purpose.Usecase is Application Servers
+	11.4 C for compute.Speciality is Compute Optimized.CPU intensive Apps/DBs
+	11.5 G for graphics.Speciality is graphics intensive.Usecase is Video Encoding/3D Application Streaming
+	11.6 I for IOPS.Speciality is High Speed Storage.Usecase is NoSQL DBs,Data Warehousing etc
+	11.7 F for FPGA.Speciality is Field Programmable Gate Array.Use case is hardware acceleration for you code.
+	11.8 T for cheap general purpose (t2 micro).Speciality is lowest cost general purpose.Use case is webserver/Small DBs
+	11.9 P - Graphics (Think pics).Speciality is graphics/general purpose GPU.Use Case is Machine Learning , Bitcoin mining etc.
+	11.10 X -  Extreme memory.Speciality is memory optimized.Usecase is SAP HANA/Apache Spark etc
+
+
+12. AMI's are regional.You can only launch an AMI from the region in which it is stored.However u can copy the AMI's to other regions using the console, command line or the amazon EC2 API. 
+
+Note- Go through EC2 FAQ
 
 
 EBS Service :- 
@@ -169,6 +186,7 @@ EBS Service :-
 		5.5 Magnetic (Standard)
 			5.5.1 Lowest cost per giga byte of ALL EBS volume types that is bootable.
 			5.5.2 Ideal for workloads where data is access infrequently and lowest storage is imp
+			5.5.3 More or less same as Cold HDD (SC1).The only diff is that it can be used as a boot volume.
 	6. You cannot mount one EBS volumne to multiple EC2 instances.For that u have to use EFS(Elastic File System)
 	7. On termination of EC2 instance the associated EBS is deleted by default.We can configure it to not to do so while launching EC2.
 	8. EBS volumes can be changed on the fly (except for the magnetic standard)
@@ -190,6 +208,15 @@ EBS Service :-
 		18.6 EBS backed instances can be stopped , You ll not lose the data on this instance if it is stopped.
 		18.7 You can reboot both instance store and EBS backed , You ll not lose your data.
 		18.8 With instance store ,by default the root volumes ll be deleted on termination.However, with EBS volumes you can tell AWS to keep the root device volume.
+	19. Volumes vs Snapshots
+		19.1 Volumes exist on EBS (i.e on virtual hard disks)
+		19.2 Snaphot exist on S3.
+		19.3 You can take snapshots of a volume ,this ll store that volumne on S3.
+		19.4 Snapshots are point in time copies of volumes.
+		19.5 Snapshots are incremental, this means that only the blocks that have changed since your last snapshot are moved to S3.Hence it takes time to create the first snapshot as against the subsequent snapshots that ll be generated.
+		19.6 Snapshots of encrypted volumes are encrypted automatically.
+		19.7 Volumes restored from encrypted snapshots are encrypted automatically.
+		19.8 You can share snapshots in market place, but only if they are unencrypted. 
 
 
 
@@ -214,7 +241,6 @@ Security Groups
 7. Security groups are stateful.It means if u create an inbound rule allowing traffic in , the traffic is automatically allowed back again
 8. You cannot block specific IP addresses using security groups , instead use Network access control lists
 9. You can specify allow rules but cannot deny rules
-10. 
 
 
 
@@ -245,6 +271,7 @@ ELB (Elastic Load Balancer) Service -
 3. ELB have their own DNS name.You are never given an IP address for ELB
 4. Read FAQ for classic ELB 
 
+
 *************************************************************************************************************************************************
 
 Cloud Watch
@@ -252,7 +279,7 @@ Cloud Watch
 1. Standard monitoring is 5 mins
 2. Detailed monitoring is 1 min
 3. With cloud watch u can create dashboards to see what is happening with ur AWS environment
-4. Allows u to set alarms that notify you when particular thresholds are hit.
+4. Allows u to set alarms that notify you when particular thresholds are hit.Also these alarms are used for auto scaling
 5. Cloudwatch events helps u to respond to state changes in AWS resources
 6. Cloud watch logs helps u to aggregate , monitor and store logs
 7. Cloudwatch is for logging and monitoring resources whereas cloudtrail is for auditing.
@@ -350,19 +377,35 @@ LAMDA
 13. LAMDA's duration time is maximum of 5 mins.Post which the execution is terminated or timed out.
 
 *************************************************************************************************************************************************
+IAM
 
+1. Roles
+	1.1 Role are more secure than storing you access key and secret access key on individual EC2 instances.
+	1.2 Roles are easier to manage.
+	1.3 Roles can be assigned to an EC2 instance after it has been provisioned using both the command line the AWS console.
+	1.4 Roles are universal.You can use them in any region
+	1.5 
+
+
+*************************************************************************************************************************************************
 Gateway API
 
 1. Cross origin resource sharing (CORS)
 	It enables you to invoke ur API URL from a website that has different host name.
 
 
+*************************************************************************************************************************************************
+
+Route53
+
+1. ELB's do not have predefined IPv4 addresses, you resolve to them using a DNS name.Hence there is a problem suppose u have acloud.guru which is a naked domain name , u ll always need an IPv4 address.To solve this issue amazon created Alias Record.Alias record allows u to resolve to a naked domain name somtimes refered to as zone apex record to a ELBs DNS address.
+2. When u make a request through route53 using CNAME you are goin to be charged for that request.But if ur making a request through route53 using Alias records then u wont be charged.Hence given the choice , always choose Alias records over CNAME
 
 
 
  https://6qblqqh77i.execute-api.us-east-1.amazonaws.com/dev
 
- 
+
 
 
 
