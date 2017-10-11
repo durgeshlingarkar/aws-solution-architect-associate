@@ -396,10 +396,46 @@ Gateway API
 
 *************************************************************************************************************************************************
 
-Route53
+Route53 - It is a global service and not region specific
+
 
 1. ELB's do not have predefined IPv4 addresses, you resolve to them using a DNS name.Hence there is a problem suppose u have acloud.guru which is a naked domain name , u ll always need an IPv4 address.To solve this issue amazon created Alias Record.Alias record allows u to resolve to a naked domain name somtimes refered to as zone apex record to a ELBs DNS address.
 2. When u make a request through route53 using CNAME you are goin to be charged for that request.But if ur making a request through route53 using Alias records then u wont be charged.Hence given the choice , always choose Alias records over CNAME
+3. The last word in the domain name reprents "top level domain" and the second word in the domain name is know as "Second level domain". Eg  in .co.uk , "uk" is top level domain and "co" is second level domain
+4. You can get the domain names at following URL. http://www.iana.org/domains/root/db
+5. A Records
+	- An "A" record is the fundamental type of DNS record and the "A" in A record stands for "Address". The A record is used by computer to translate the name of the domain to the IP address.For eg:- http://www.acloudguru.com might point to http://123.10.10.80
+6. TTL
+	- The length that a DNS record is cached on either the resolving server or the users own local PC is equal to the value of the "Time To Live" (TTL) in seconds.The lower the time to live, the faster changes to DNS records take to propagate throught the internet.
+7. CNAME
+	- A Canonical Name (CNAME) can be used to resolve one domain name to another.For example, you may have a mobile website with the domain name http://m.acloudguru.com that is used for when users browse to your domain name on mobile devices.You may want the name http://mobile.acloudguru.com to resolve to this same address.
+8. Routing Policy
+	8.1 Simple Routing Policy
+		8.1.1 This is the default routing policy when u create a new record set.This is most commonly used when you have a single resource that performs a given function for your domain, for example, one web server that serves the content.
+		
+	8.2 Weighted Routing Policy
+		8.2.1 This policy let you split your traffic based on different weights assigned.For eg. You can set 10% of your traffic to go to US-EAST-1 and 90% to go to EU-WEST-1
+
+	8.3 Latency Routing Policy
+		8.3.1 Latency based routing allows you to route your traffic based on the lowest network latency for you end user(i.e which region ll give them the fastest response time).
+		8.3.2 To use latency based routing you create a latency resource record set for the amazon EC2 (or ELB) resource in each region that hosts your website.When Amazon Route 53 receives a query for your site, it selects the latency resource record set for the region that gives the user the lowest latency. Route53 then responds with the value associated with that resource record set.
+
+
+	8.4 Failover Routing Policy
+		8.4.1 Failover routing policies are used when you want to create and active/passive setup.For example you may want your primary site to be in EU-WEST-2 london region and ur secondary DR site in AP-SOUTHEAST-2 sydney region.
+		8.4.2 Route53 ll monitor the health of your primary site using a health check.A heath check monitors the health of your endpoints.
+		8.4.3 If the health check fails , then the traffic is routed to your DR site by Route53. 
+
+	8.5 Geolocation Routing Policy
+		8.5.1 Geolocation routing lets you choose where your traffic will be sent based on the geographic location of your users(i.e the location from which the DNS queries originate). For Eg:- You might want all queries from Europe to be  routed to a fleet of EC2 instances that are specifically configured for your european customers.These servers may have the local language of your European customers and all prices are displayed in EUROS.
+
+	8.6 Route53 does support MX (Mail Exchange) records 
+	
+	8.7 There is a limit of 50 domain names u can have using Route53, however this limit can be raised by contacting AWS support.
+			
+
+
+
 
 
 
