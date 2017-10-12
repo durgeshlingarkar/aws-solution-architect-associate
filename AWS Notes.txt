@@ -432,16 +432,134 @@ Route53 - It is a global service and not region specific
 	8.6 Route53 does support MX (Mail Exchange) records 
 	
 	8.7 There is a limit of 50 domain names u can have using Route53, however this limit can be raised by contacting AWS support.
-			
 
 
+************************************************************************************************************************************************
+
+RDS Service 
+
+1. Relational Databases under RDS
+	1.1.1 SQL server
+	1.1.2 Oracle
+	1.1.3 MySQL Server
+	1.1.4 PostgreSQL
+	1.1.5 Aurora
+	1.1.6 MariaDB
+
+2. Non Relational Databases/NoSQL Databases under RDS
+	1.1 DynamoDB
+
+3. RedShift 
+	1. It is for datawarehousing or OLAP service.
 
 
+4. Elastic Cache
+	4.1 Elastic cache is a web service that makes it easy to deploy, operate and scale an in memory cache in cloud.The service improves the performance of web applications by allowing you to retrieve information from fast,managed in memory caches , instead of relying entirely on slower disk based databses.
+	4.2 Elastic cache supports 2 open source in memory caching engines 
+		4.2.1 Memcached
+		4.2.2 Redis
+5. DMS (Database Migration service)
+	5.1 Allows u to migrate ur production database to AWS.Once the migration has started,AWS manages all the complexities of the migration processes like data type transforation, compression, and parallel transfer(for faster data transfer) while ensuring that data changes to the source database that occur during the migration process are automatically replicated to the target.
+	5.2 AWS schema conversion tool automatically converts the source database schema and a majority of the custom code , including views ,stored procedures and functions to a format compatiable with the target database.	 		
+
+6. Datawarehousing vs RDS / OLTP vs OLAP 
+	6.1 OLTP didders from OLAP in terms of the typs of queries they run.
+	6.2 OLTP eg :- get details of order 1001.Pulls up the row of data name , date , address,delivery status etc.
+	6.3 OLAP eg:- Net profit for EMEA and pacific for the digital radio product.Pulls in the large number of records and does operations like summation
+
+7. RDS Backups
+	7.1 Automated Backups
+		7.1.1 There are 2 diff types of backups for AWS.Automated Backups and Database Snapshots.
+		7.1.2 Automated backups allow you to recover your database to any point in time within a "retention period".Retention period can be between 1 and 35 days.Automated backups ll take a full daily snapshot and ll also store transaction logs throught the day.When u do a recovery, AWS ll choose the most recent daily backup, and  then apply transaction logs relevant to that day.This allows you to do a point in time recovery down to a second, within a retention period.
+		7.1.3 Automated backups are endbaled by default.This backup data is stored in S3 and you get a free storage space equal to the size of your database.So if you have a RDS instance of 10GB you ll get 10GB worth of storage.
+		7.1.4 Backups are taken within a defined window.During the backup window, storage I/O may be suspended while your data is being backed up and you may experience elavated latency.
+
+	7.2 Snapshots
+		7.2.1 DB snapshots are done manually (i.e initiated by user).They are stored even after you delete the original RDS instance, unlike automated backups.
+
+	7.3 Whenever you restore either an Automatic Backup or a manual snapshot , the restored version of the database will be a new RDS instance with an new end point.
+	
+8 Encryption
+	8.1 Encryption at rest is supported for MySQL, Oralce, SQL server,PostgreSQL & MariaDB. Encryption is done using AWS Key Management System (KMS) service.Once you RDS instance is encrypted the data stored at rest in the underlying storage is encrypted , as are its automated backups ,read replicas and snapshots.
+	8.2 At present time, encrypting an existing DB instance is not supported.To use amazon RDS encryption for an existing database, create a new DB instance with encryption enabled and migrate your data into it.
 
 
- https://6qblqqh77i.execute-api.us-east-1.amazonaws.com/dev
+9 Multi AZ RDS
+	9.1 Multi AZ allows u to have an exact copy of your production database in another AZ.AWS haldles the replication for you, so when your production database is written to, this write ll automatically be synchronised to the stand by  database.
+	9.2 In the event of planned database maintainance, DB instance failure, or an AZ failure, Amanzon RDS ll automatically failover to the standby so that database operations can resume quickly without administrative intervention.
+	9.3 Multi AZ is for  disaster recovery only.It is not primarily used for performance improvement.For performance improvement you need read replicas.
+	9.4 Multi AZ Databases are applicable for
+		9.4.1 SQL Server
+		9.4.2 Oracle
+		9.4.3 MySQL Server
+		9.4.4 PostgreSQL
+		9.4.5 MariaDB
 
+10 Read Replica
+	10.1 Read replica allows you to have a read only copy of your production database.This is achieved by using asynchronous replication from the primary RDS instance to the read replica.You can use read replica's primarily for very read-heavy database workloads.
+	10.2 Read Replicas are supported in 
+		10.2.1 MySQL Server
+		10.2.2 PostgreSQL
+		10.2.3 MariaDB
+	10.3 Read replicas are used for scaling and not for DR
+	10.4 Must have automatic backups turned on in order to deploy a read replica.
+	10.5 You can have upto 5 red replicas copy of any database
+	10.6 You can have read replicas of read replicas (but watch out for latency)	
+	10.7 Each read replicas is gonna have its own DNS end point.
+	10.8 You cannot have Read Replicas that have Multi AZ.
+	10.9 You can create read replicas of multi AZ source databases however.
+	10.10 Read replicas can be promoted to be their own databases.This breaks the replication.
+	10.11 You can also have read replicas in a second region for MySQL and MariaDB.Not for PostgreSQL.
 
+ Note :- Read FAQs of RDS service.
 
+11. DynamoDB vs RDS
+	11.1 DynamoDB offers "push button" scaling , meaning that u can scale your database on the fly , without any down time.
+	11.2 RDS is not so easy and you usually have to use a bigger instance size or to add a replica.
+	11.3 In RDS you can scale up but scale out is only possible in case of reads and not writes.
 
+12. DynamoDB
+	12.1 Amazon DynamoDB is fast and flexible NoSQL database service for all applications that need consistent, single digit latency at any scale.It is a fully managed database and supports both document and key value data models.Its flexile data model and reliable performance make it a great fit for mobile,web,gaming ,ad-tech,IOT and many other applications.
+	12.2 DynamoDB is always stored on SSD storage.
+	12.3 DynamoDB is spread across 3 geographically distinct data centres.
+	12.4 DynamoDB has eventual consistent reads by default.
+		12.4.1 Consistancy across all copies of data is usually reached within a second.Repeating a read after a short time should return the updated data. (This is a best model for Read Performance)	
+	12.5 DynamoDB also supports Strongly Consistent Reads
+		12.5.1 A strongly consistent read returns a result that reflect all writes that received a succesful response prior to the read.		
+	12.6 Pricing
+		12.6.1 Provisioned ThroughPut Capacity
+			12.6.1.1 Write throughput $0.0065 per hour for every 10 units.
+			12.6.1.2 Read throughput $0.0065 per hour for every 50 units
+		12.6.2 Storage cost of $0.25 Per GB per month.
+		12.6.3 Pricing Example
+				12.6.3.1 Lets assume that ur application needs to perform 1 million writes and 1 million reads per day, while storing 3GB of data.First u need to calculate how many writes and reads per second you need.
+				12.6.3.2 One million evenly spread writes per day is equivalent to 1000000(writes)/24(hours)/60(minute)/60(seconds)=11.6 write per second.
+				12.6.3.3 A DynamoDB capacity unit can handle 1 write per second, so you need 12 write capacity units.
+				12.6.3.4 Similarly, to handle 1 million strongly Consistent reads per day , you need 12 read capacity units.
+				12.6.3.5 With Read capacity units, you are billed in blocks of 50.With write capacity units, You are billed in blocks of 10.
+				12.6.3.6 To calculate Write capacity units (0.0065/10)*12*24=$1872
+				12.3.6.7 To calculate Read Capacity units = (0.0065/50)*12*24=$0.0374		 							
 
+13. RedShift
+	13.1 Amazon RedShift is a fast and powerful, fully managed, Petabyte-scale data warehouse service in the cloud.Customers can start small for just $0.25 per hour with no commitments or upfront costs and scale to a petabyte or more for $1000 per terabyte per year, less than a tenth of most other dataware housing solutions.
+	13.2 Redshift is used for OLAP operations.  
+	13.3 Redshift Configuration
+		13.3.1 Single Node - Upto 160 GB
+		13.3.2 Multi Node - If you want to scale more than 160 GB use multi node.
+			13.3.2.1 Leader Node - Manages client connections and received queries
+			13.3.2.2 Compute Node - Stores data and performs queries and computations.You can have upto 128 compute nodes.
+	13.4 Redshift has columnar data storage - Instead of storing data as a series of rows, Amazon Redshift organizes the data by column.Unlike row based system, which are ideal for transaction processing, column based systems are ideal for data warehousing and analytics, where queris often involve aggregates performed over large datasets. Since only the columns involved in the queries are processed and columnar data is stored sequentially on the storage media, column based systems require far fewer I/Os, greatly inproving query performance.
+	13.5 Redshift has Advanced Compression - Columnar data stores can be compressed much more than row based data stores because similar data is stored sequentially on disk.Amazon redshift employs multiple compression techniques and can often achieve significant compression relative to traditional relational data stores.In Addition, Amazon Redshift doesnt requires indexes or materialized views and so use less space than traditional relational database systems.When loading data into an empty table, Amazon Redshift automatically samples your data and selects the most appropriate compression scheme.
+	13.5 Redshift has Massively Parallel Processing (MPP) - Amazon Redshift automatically distributes data and query across all nodes.Amazon redshift makes it easy to add nodes to your data warehouse and enables you to maintain fast query performance as your data warehouse grows.
+	13.6 Redshift Pricing
+		13.6.1 Compute node hours - Total number of hours you run across all your compute nodes for the billing period.You are billed for 1 unit per node per hour, so a 3-node data warehouse cluster running persistingly for an entire month would incur 2160 instance hours.You ll not be charged for leader node hour.Only compute nodes ll incur charges.
+		13.6.2 Backup - You are charges for BackUp
+		13.6.3 Data Transfer - You are charged for data transfer (but only within a VPC not outside it)
+	13.7 Redshift Security
+		13.7.1 Encrypted in transit using SSL
+		13.7.2 Encrypted at rest using AES-256 encryption
+		13.7.3 By default Redshift takes care of key management.However you can manage your keys through HSM (Hardware Security Module) or through AWS Key Management Service.
+	13.8 Redshift Availability
+		13.8.1 Currently only available in 1AZ
+		13.8.2 You can restore snapshots of Redshift to new AZs in the event of an outage.
+		
