@@ -562,4 +562,29 @@ RDS Service
 	13.8 Redshift Availability
 		13.8.1 Currently only available in 1AZ
 		13.8.2 You can restore snapshots of Redshift to new AZs in the event of an outage.
+
+14. Elasticache
+	14.1 Elasticache is a webservice that makes it easy to deploy, operate and scale an in memory cache in the cloud.The service improves the performance of web applications by allowing you to retrieve information from fast, managed, in memory caches instead of relying entirely on slow disk based databases.
+	14.2 Caching improves application performance by storing critical pieces of data in memory for low latency access.Cached information may include the results of I/O intensive database queries or the results of the computationally intensive calculations.
+	14.3 Types of ElastiCache
+		14.3.1 MemCached
+			14.3.1.1 A widely adopted memory object caching system.Elasticache is protocol compliant with Memcached, so popular tools that u use today with existing Memcached environments will work seamlessly with the service.
+		14.3.2 Redis
+			14.3.2.1 A popular open source in memory key-value store that supports data structures such as sorted set and lists.Elasticache supports Master/Slave replication and multi AZ which can be used to achieve cross AZ redundancy.
+	14.4 Scenario - Typically u ll be given a scenario where a particular database is under a lot of stress/load. You ll be asked which service you should use to alleviate this.
+		14.4.1 Elasticache is good choice if ur database is particularly read heavy and not prone to frequent changes.
+		14.4.2 Redshift is good if the reason your database is feeling stress is because management keep running OLAP transactions on it etc.
+
+15. Aurora
+	15.1 Amazon Aurora is a MySQL-Compatiable, relational database engine that combines the speed and availability of high end commercial databases with the simplicity and cost effectiveness of an open source databases.Amazon Aurora provides upto five time better performance than MySQL at a price point one tenth of that of a commercial database while delivering similar performance and availability.
+	15.2 Scaling 
+		15.2.1 Start with 10GB, scales in 10GB increments to 64TB (Storage AutoScaling)
+		15.2.2 Compute resources can scale up to 32vCPUs and 244GB of memory.
+	15.3 Two copies of ur data is contained in each availability zone, with minimum of 3 availability zones.6 copies of your data is maintained.
+	15.4 Aurora is designed to transparently handle the loss of up to 2 copies of data without affecting database write availability and upto 3 copies without affecting read availability.
+	15.5 Aurora storage is also self healing.Data blocks and disks are continously scanned for erros and repaired automatically.
 		
+
+
+
+						
