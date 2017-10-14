@@ -225,7 +225,34 @@ EBS Service :-
 
 VPC 
 
-1. One subnet is equal to one AZ.One subnet cannot span across multiple AZs
+1. Amazon Virtual Private Cloud lets u provision a logically isolated section of the Amazon web services cloud where you can launch AWS resources in virtual network that you define.You have complete control over your virtual networking environment, including selection of your IP address range , creation of subnets , and configuration of route tables and network gateways.
+2. You can easily customize the network configuration for you Amazon Virtual Private Cloud.For example, you can create a public facing subnet for your webservers that has access to the internet, and place your backend systems such as databases or application servers in a private facing subnet with no internet access.You can also leverage multiple layers of security, including security groups and network access control lists, to help control to Amazon EC2 instances in each subnet.
+3. Additionally, you can create a Hardware Virtual Private Network (VPN) connection between your corporate datacenter and your VPC and leverage the AWS cloud as an extension of your corporate datacenter.This setup is also called as hybrid cloud 
+4. What can you do with VPC
+	4.1 Launch instances into a subnet of your choosing
+	4.2 Assign custom IP address ranges for each subnet.
+	4.3 Configure route tables between subnets
+	4.4 Create an Internet Gateway and attach it to your VPC.
+	4.5 Much better security control over your AWS resources.
+	4.6 Create security groups for instances
+	4.7 Subnet network access control lists(ACLS)
+5. Default VPC
+	5.1 Default VPC is user friendly , allowing you to immediately deploy instances.
+	5.2 All subents in default VPC have a route out to the internet.
+	5.3 Each EC2 instance have both a public and private IP address.
+	5.4 If u delete the default VPC the only way to get it back is to contact AWS.
+6. VPC Peering
+	6.1 Allows you to connect one VPC with another via a direct network route using private IP addresses.
+	6.2 Instances behave as if they are om the same private network.
+	6.3 You can peer VPC's with other AWS accounts as well as with other VPCs in the same account.
+	6.4 Peering is in a star configuration, i.e 1 central VPC peers with 4 others. No Transitive Peering (i.e one VPC cannot talk to other VPC via a third VPC)
+7. Think of a VPC as logical datacenter in AWS	
+8. It consists of IGW's (Internet Gateway or Virtual Private Gateways), Route Tables, Network Access Control Lists, Subnets, Security Groups.
+9. One VPC can only have one Internet Gateway.You cannot configure multiple internet gateways to a VPC.
+10. One subnet is equal to one AZ.One subnet cannot span across multiple AZs
+11. Security Groups are statefull , Network Access Control Lists are stateless
+12. There is no Transitive Peering in a VPC.
+ 
 
 
 
@@ -583,7 +610,16 @@ RDS Service
 	15.3 Two copies of ur data is contained in each availability zone, with minimum of 3 availability zones.6 copies of your data is maintained.
 	15.4 Aurora is designed to transparently handle the loss of up to 2 copies of data without affecting database write availability and upto 3 copies without affecting read availability.
 	15.5 Aurora storage is also self healing.Data blocks and disks are continously scanned for erros and repaired automatically.
-		
+
+16. By default, the maximum provisioned IOPS capacity on an Oracle and MySQL RDS instance (using provisioned IOPS) is 30,000 IOPS.
+
+17. When replicating data from your primary RDS instance to your secondary RDS instance, the data transfer is free of any charge.
+
+18. When you add a rule to an RDS security group you do  need to specify a port number or protocol
+
+19. If you are using Amazon RDS Provisioned IOPS storage with MySQL and Oracle database engines, the maximum size RDS volume you can have by default is 6TB
+
+20. By default, the maximum provisioned IOPS capacity on an Oracle and MySQL RDS instance (using provisioned IOPS) is 30,000 IOPS.
 
 
 
