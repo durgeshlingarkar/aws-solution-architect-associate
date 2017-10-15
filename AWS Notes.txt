@@ -252,7 +252,44 @@ VPC
 10. One subnet is equal to one AZ.One subnet cannot span across multiple AZs
 11. Security Groups are statefull , Network Access Control Lists are stateless
 12. There is no Transitive Peering in a VPC.
- 
+13. When you create a VPC then Route Tables, Security Groups and Network Access Control Lists are automatically created.
+14. NAT Instances
+	14.1 When creating a NAT instance, Disable Source/Destination check on instance.
+	14.2 NAT instance must be in a public subnet.Once subnet is equal to one AZ.So NAT is always in one AZ.
+	14.3 There must be a route out of the private subnet to the NAT instance, in order for this to work.
+	14.4 The amount of traffic that a NAT instance supports, depends on the instance size.If you are bottlenecking, increase the instance size.
+	14.5 You can create high availability using AutoScaling Groups, Multiple Subnets in different AZs and a script to automate failover.
+	14.6 NAT instances are always behind a security group.
+15. NAT Gateways
+	15.1 NAT gateways are very new.
+	15.2 Preffered by the enterprise.
+	15.3 Scale automatically up to 10gbps
+	15.4 No need to patch.
+	15.5 Not associated with security groups.
+	15.6 Automatically assigned a public  IP address
+	15.7 Remember to update your route table.
+	15.8 No need to disable Source/Destination checks.
+16. Read NAT Instances vs NAT Gateways in AWS docuentation
+17. Security Groups vs Network ACL
+	17.1 Security group operates at instance level (first layer of defence) where as Network ACL operates at subnet level (Second Layer of Defence)
+	17.2 Security groups supports allow rules only where as Network ACL supports allow rules and deny rules.
+	17.3 SGs are steteful (i.e Return traffic is automatically allowed, regardless of any rules) where as Network ACL is stateless (i.e return traffic must be explicitly allowed by rules)	
+	17.4 SGs evaluate all rules before deciding whether to allow traffic whereas Network ACL process rules in number order when deciding whether to allow traffic.
+	17.5 SGs applies to an instance only if someone specifies the security group when launching the instance, or associate the security group with the instance later on. whereas Network ACL automatically applies to all instances in the subnets it's associated with (backup layer of defence, so you dont have to rely on someone specifying the security group.)
+18. Network ACL
+	18.1 Your VPC automatically comes with a default Network ACL and by default it allows all outbound and inbound traffic.
+	18.2 You can create custom Network ACL.By Default, each custom network ACL denies all inbound and outbound traffic untill you add rules.
+	18.3 Each subnet in your VPC must be associated with a network ACL.If you dont explicitly associate a subnet with a Network ACL, the subnet is automatically associated with the default network ACL.
+	18.4 You can associate a Network ACL with multiple subnets.However, a subnet can be associated with only one Network ACL at a time.When you associate a network ACL with a subnet, the previous assiciation of the subnet is removed.
+	18.5 A network ACL contains a numbered list of rules that is evaluated in order , starting with the lowest numbered rule.
+	18.6 A network ACL has separate inbound and outbound rules, and each rule can either allow or deny traffic.
+	18.7 Network ACLs are stateless.i.e responses to allowed inbound traffic are subject to the rules for outbound traffic and vice versa.
+	18.8 You can block specific IP addresses using network ACLs and not security groups.
+19 NAT VS Bastion
+	19.1 A NAT is used to provide internet traffic to EC2 instances in private subnets whereas a Bastion is used to securely administer EC2 instances (using SSH or RDP) in private subnets. 
+20. Five VPCs are allowed in each AWC region by default.
+
+	
 
 
 
