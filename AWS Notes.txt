@@ -287,7 +287,7 @@ VPC
 	18.8 You can block specific IP addresses using network ACLs and not security groups.
 19 NAT VS Bastion
 	19.1 A NAT is used to provide internet traffic to EC2 instances in private subnets whereas a Bastion is used to securely administer EC2 instances (using SSH or RDP) in private subnets. 
-20. Five VPCs are allowed in each AWC region by default.
+20. Five VPCs are allowed in each AWS region by default.
 
 	
 
@@ -659,5 +659,24 @@ RDS Service
 20. By default, the maximum provisioned IOPS capacity on an Oracle and MySQL RDS instance (using provisioned IOPS) is 30,000 IOPS.
 
 
+*************************************************************************************************************************************************
 
+SQS (Simple Queue Service)
+1. SQS was the first ever AWS service that was publicly available and hence the oldest service. 
+2. Amazon SQS is web service that gives you access to a message queue that can be used to store messages while waiting for a computer to process them.Amazon SQS is a distributed queue system that enables web service applications to quickly and reliably queue messages that one component in the application generates to be consumed by another component.A queue is a temporary repository for messages that are waiting for processing.
+3. Using SQS you can decouple the components of an application so they run independently, with amazon SQS easing message management between components.Any component of a distributed application can store messages in fail-safe queue.Messages can contain upto 256KB of text in any format.Any component can later retrieve the messages programatically using the SQS API.
+4.The queue acts as a buffer between the component producing and saving data, and the component receiving the data for processing.This means the queue resolves the issues that arises if the producer is producing work faster than the consumer can process it, or if the producer or consumer are only intermittenly connected to network.
+5. Types of Queue in SQS
+	5.1 Standard Queues (default)
+		5.1.1 Amazon SQL offers standard as the default queue type.A standard queue lets you have nearly unlimited number of transactions per second.Standard queues gaurantee that the message is delivered atleast once.However, ocassionally(because of the highly distributed architecture that allows high throughput ), more than one copy of the message might be delivered out of order.Standard queue provide best effort ordering which ensures that messges are generally delivered in the same order as they are sent.
+	5.2 FIFO Queues
+		5.2.1 The FIFI queue complements the standard queue.The most important feature of this queue type are FIFO delivery and exactly once processing: The order in which messages are sent and received is strictly preserved and a message is delivered once and remains available until a consumer processes and deletes it.Duplicates are not introduced into the queue.FIFO queues also support message groups that allow multiple ordered message groups within a single queue.FIFO queues are limited to 300 transactions per second (TPS) , but have all the capabilities of standard queues. 	
+6. SQS Keyfacts
+	6.1 SQS is pull based not push based.
+	6.2 Messages are 256KB in size.
+	6.3 Messages can be kept in the queue from 1 minute to 14 days.The default is 4 days.
+	6.4 Visibility Time out is the amount of time that the message is invisible in the SQS queue after the reader picks up the message.Provided the job is processed before the visibility time out expires, the message ll then be deleted from the queue.If the job is not processed within that time , the message ll become visible again and another reader ll process it.This could result in the same message being delivered twice.
+	6.5 Maximum visibility timeout is 12 hours.
+	6.6 SQS gaunrantees that your messages ll be processed atleast once.
+	6.7 Amzon SQS long polling is a way to retrieve messages from your SQS queues.While the regular short polling returns immediately, even if the message queue being polled is empty, long polling doesnt return a response until a message arrives in the nessage queue or the long poll times out.Thus long polling is less expensive as compared to short polling as in short polling an EC2 continously polls the queue for messages.
 						
