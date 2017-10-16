@@ -671,12 +671,27 @@ SQS (Simple Queue Service)
 		5.1.1 Amazon SQL offers standard as the default queue type.A standard queue lets you have nearly unlimited number of transactions per second.Standard queues gaurantee that the message is delivered atleast once.However, ocassionally(because of the highly distributed architecture that allows high throughput ), more than one copy of the message might be delivered out of order.Standard queue provide best effort ordering which ensures that messges are generally delivered in the same order as they are sent.
 	5.2 FIFO Queues
 		5.2.1 The FIFI queue complements the standard queue.The most important feature of this queue type are FIFO delivery and exactly once processing: The order in which messages are sent and received is strictly preserved and a message is delivered once and remains available until a consumer processes and deletes it.Duplicates are not introduced into the queue.FIFO queues also support message groups that allow multiple ordered message groups within a single queue.FIFO queues are limited to 300 transactions per second (TPS) , but have all the capabilities of standard queues. 	
-6. SQS Keyfacts
-	6.1 SQS is pull based not push based.
-	6.2 Messages are 256KB in size.
-	6.3 Messages can be kept in the queue from 1 minute to 14 days.The default is 4 days.
-	6.4 Visibility Time out is the amount of time that the message is invisible in the SQS queue after the reader picks up the message.Provided the job is processed before the visibility time out expires, the message ll then be deleted from the queue.If the job is not processed within that time , the message ll become visible again and another reader ll process it.This could result in the same message being delivered twice.
-	6.5 Maximum visibility timeout is 12 hours.
-	6.6 SQS gaunrantees that your messages ll be processed atleast once.
-	6.7 Amzon SQS long polling is a way to retrieve messages from your SQS queues.While the regular short polling returns immediately, even if the message queue being polled is empty, long polling doesnt return a response until a message arrives in the nessage queue or the long poll times out.Thus long polling is less expensive as compared to short polling as in short polling an EC2 continously polls the queue for messages.
+	5.3. SQS Keyfacts
+		5.3.1 SQS is pull based not push based.
+		5.3.2 Messages are 256KB in size.
+		5.3.3 Messages can be kept in the queue from 1 minute to 14 days.The default is 4 days.
+		5.3.4 Visibility Time out is the amount of time that the message is invisible in the SQS queue after the reader picks up the message.Provided the job is processed before the visibility time out expires, the 5.3message ll then be deleted from the queue.If the job is not processed within that time , the message ll become visible again and another reader ll process it.This could result in the same message being delivered twice.
+		5.3.5 Maximum visibility timeout is 12 hours.
+		5.3.6 SQS gaunrantees that your messages ll be processed atlea6t once.
+		5.3.7 Amzon SQS long polling is a way to retrieve messages from your SQS queues.While the regular short polling returns immediately, even if the message queue being polled is empty, long polling doesnt return a response until a message arrives in the nessage queue or the long poll times out.Thus long polling is less expensive as compared to short polling as in short polling an EC2 continously polls the queue for messages.
+
+************************************************************************************************************************************************		
+SWF Service
+
+1. Amazon Simple Workflow Service (Amazon SWF) is a web service that makes it easy to co ordinate work across distributed application components.Amazon SWF enables applications for a range of use cases, including media processing, web application backends, business process workflows, and analytics pipelines, to be designed as a coordinatin of tasks.Tasks represent invocations of various processing steps in an application which can be performed by executable code, web service calls, human actions and scripts.
+2. SWF vs SQS
+	2.1 SQS has a retention period of 14 days , SWF upto 1 year for workflow executions.
+	2.2 SWF presents a task oriented API , whereas SQS offers a message oriented API
+	2.3 SWF ensures that a task is assigned only once and is never duplicated.With SQS you need to handle duplicated messages and may also need to ensure that a message is processed only once.
+	2.4 SWF keeps track of all the tasks and events in an application.With SQS you need to implement your own application level tracking, especially if your application uses multiple queues.
+3. SWF Actors
+	3.1 Workflow Starters - An application that can initiate (start) a workflow.Cloud be your e-commerece website when placing an order or a mobile app searching for bus times.
+	3.2 Deciders - Control the flow of activity tasks in a workflow execution.If something has finished in a workflow (or fails) a Decider decides what to do next.
+	3.3 Activity Workers - Carry out the activity tasks.
+		
 						
