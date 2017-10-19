@@ -160,6 +160,11 @@ EC2 Service :-
 
 12. AMI's are regional.You can only launch an AMI from the region in which it is stored.However u can copy the AMI's to other regions using the console, command line or the amazon EC2 API. 
 
+13. You cannot move a reserved EC2 instance from one region to another.
+
+14. Reserved instances are available for multi-az deployments.
+
+15. The underlying Hypervisor for EC2 is "XEN"
 Note- Go through EC2 FAQ
 
 
@@ -537,6 +542,7 @@ RDS Service
 		7.1.2 Automated backups allow you to recover your database to any point in time within a "retention period".Retention period can be between 1 and 35 days.Automated backups ll take a full daily snapshot and ll also store transaction logs throught the day.When u do a recovery, AWS ll choose the most recent daily backup, and  then apply transaction logs relevant to that day.This allows you to do a point in time recovery down to a second, within a retention period.
 		7.1.3 Automated backups are endbaled by default.This backup data is stored in S3 and you get a free storage space equal to the size of your database.So if you have a RDS instance of 10GB you ll get 10GB worth of storage.
 		7.1.4 Backups are taken within a defined window.During the backup window, storage I/O may be suspended while your data is being backed up and you may experience elavated latency.
+		7.1.5 In RDS, changes to the backup window take effect immediately	
 
 	7.2 Snapshots
 		7.2.1 DB snapshots are done manually (i.e initiated by user).They are stored even after you delete the original RDS instance, unlike automated backups.
@@ -658,6 +664,22 @@ RDS Service
 
 20. By default, the maximum provisioned IOPS capacity on an Oracle and MySQL RDS instance (using provisioned IOPS) is 30,000 IOPS.
 
+21. AMAZON RDS does not currently support increasing storage on a SQL Server DB Instance
+
+22. If you want your application to check whether a request generated an error then you look for an "Error" node in the response from the Amazon RDS API
+
+23. In RDS,the maximum size for a Microsoft SQL Server DB instance with SQL server express edition is 10GB.
+
+24. You can "force" a failover for any RDS instance that has Multi AZ configured.Follow this documentation http://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_RebootDBInstance.html
+
+25. MySQL installations default to port number 3306
+
+26. You cannot RDP or SSH in to an RDS instance to see what is going on with the operating system.
+
+27. In RDS, you are not responsible for maintaining OS & Application security patching, antivirus etc.
+
+
+
 
 *************************************************************************************************************************************************
 
@@ -676,9 +698,11 @@ SQS (Simple Queue Service)
 		5.3.2 Messages are 256KB in size.
 		5.3.3 Messages can be kept in the queue from 1 minute to 14 days.The default is 4 days.
 		5.3.4 Visibility Time out is the amount of time that the message is invisible in the SQS queue after the reader picks up the message.Provided the job is processed before the visibility time out expires, the 5.3message ll then be deleted from the queue.If the job is not processed within that time , the message ll become visible again and another reader ll process it.This could result in the same message being delivered twice.
-		5.3.5 Maximum visibility timeout is 12 hours.
-		5.3.6 SQS gaunrantees that your messages ll be processed atlea6t once.
+		5.3.5 Maximum visibility timeout is 12 hours.So if you have jobs/processes that last more than 12 hours, SQS may not be the service u could use.
+		5.3.6 SQS gaunrantees that your messages ll be processed atleast once.
 		5.3.7 Amzon SQS long polling is a way to retrieve messages from your SQS queues.While the regular short polling returns immediately, even if the message queue being polled is empty, long polling doesnt return a response until a message arrives in the nessage queue or the long poll times out.Thus long polling is less expensive as compared to short polling as in short polling an EC2 continously polls the queue for messages.
+
+Note - Read FAQs for SQS		
 
 ************************************************************************************************************************************************		
 SWF Service
@@ -693,5 +717,236 @@ SWF Service
 	3.1 Workflow Starters - An application that can initiate (start) a workflow.Cloud be your e-commerece website when placing an order or a mobile app searching for bus times.
 	3.2 Deciders - Control the flow of activity tasks in a workflow execution.If something has finished in a workflow (or fails) a Decider decides what to do next.
 	3.3 Activity Workers - Carry out the activity tasks.
-		
-						
+4. Domain refers to a collection of related workflows	
+
+*************************************************************************************************************************************************
+
+SNS Service
+
+1. Amazon Simple Notification Service (Amazon SNS) is a web service that makes it easy to setup, operate , and send notifications from cloud.It Provides developers with a highly scalable, flexible and cost effective capbility to publish messages from an application and immediately deliver them to the subscribers or other applications.
+2. Using SNS , you can push notifications to Apple,Google, Fire OS and Windows Devices as well as Android Devices in china with Baidu Cloud Push.
+3. Besides pushing cloud notifications directly to mobile devices, SNS can also deliver notificatons by SMS text message or email, to Amazon Simple Queue Service (SQS) queues, or to any http endpoint.SNS notifications can also trigger lambda functions.When a message is published to an SNS topic that has a lambda function subscribed to it, the lambda function is invoked with the payload of the published message.The Lambda function receives the message payload as an imput parameter and can manipulate the information in the message, Publish the message to other SNS topics, or send the message to other AWS services.
+3. SNS is a push messaging system.
+4. SNS allows you to group multiple recipients using topics.A topic is an "access point" for allowing recipients to dynamically subscribe for identical copies of same notification.One topic can support deliveries to multiple endpoint types -- for eg , You can group together IOS,Android and SMS recipients.When u publish once to a topic, SNS delivers appropriately formatted copies of your message to each subsciber.
+5. To prevent message from being lost , all messages published to Amazon SNS are stored redundantly across multiple AZs.
+6.Benefits of SNS
+	6.1 Instantaneos, Push based delivery(no polling)
+	6.2 Simple APIs and easy integration with applications.
+	6.3 Flexible message delivery over multiple transport protocols.
+	6.4 Inexpensive, pay-as-you-go model with no upfront costs.
+	6.5 Web-based AWS management console offers the simplicity of a point and click interface.
+7. SNS vs SQS
+	7.1 Both are messaging services in AWS.
+	7.2 SNS is push based.
+	7.3 SQS is pull based (Polling)
+8. SNS Pricing 
+	8.1 Users pay $0.50 per 1 million Amazon SNS requests
+	8.2 $0.06 per 100,000 Notification deliveries over HTTP.
+	8.3 $0.75 per 100 Notification deliveries over SMS.
+	8.4 $2 per 100,000 Notification deliveries over Email.
+9. SES stands for Simple Email Service	
+
+*************************************************************************************************************************************************
+
+Elastic Transcoder
+
+1. Elastic transcoder is a Media Transcoder in the cloud. 
+2. Convert media files from their original source format into different different formats that ll play in smart phones, tablets , PCs etc.It provides transcoding presets for popular output format, which means that u dont neet to guess about which setting work best on a particular devices.
+3. You can pay based on the minutes that u transcode and the resolution at which you transcode.
+4. Read a blog about Elastic transcoder at link "https://read.acloud.guru"
+
+*************************************************************************************************************************************************
+
+API Gateway
+
+1. Amazon API Gateway is a fully managed service that makes it easy for developers to publish, maintain , monitor and secure APIs at any scale.With the few clicks in AWS management consol, You can create an API that acts as a "front door" for applications to access data, business logic, or functionality from your back end services, such as applications running on Amazon Elastic Compute Cloud(EC2), code running on AWS lambda, or any other web application.
+2. You can enable API caching in AMAZON API gateway to cache your endpoint's response. With caching, you can reduce the number of calls made to  your endpoint and also improve the latency of requests made to your API.When you enable caching for a stage , API gateway caches respnses from your end point for a specified tine-to-live (TTL) period , in seconds.API gateway then responds to the request by looking up the end point response from the cache instead of making a requst to your endpoint. 
+3. API gateways are low on cost efficient.
+4. API gateways scales effortlessly.
+5. You can throttle requests to prevent attack.
+6. API gateways can be connected to cloud watch to log all requests.
+7. Same Origin Policy
+	7.1 - In computing, the same origin policy is an important concept in the web application security model.Under the policy, a web browser permits scripts contained in the first web page to access data in a second web page, but only if both the webpages have the same origin.
+8. Cross-Origin Resource Sharing (CORS)
+	8.1 CORS is one way, the server at the other end (not the client code in browser.) can relax the same origin policy.
+	8.2 CORS is a mechanism that allows restricted resources (rg fonts) on the webpage to be requested from another domain outside the domain from which the first resource was served.
+9. If there is this error "Origin policy cannot be read at the remote resource?".You need to enable CORS on API gateway.
+
+*************************************************************************************************************************************************
+
+Kinesis 
+
+1. Amazon Kinesis is a platform on AWS to send your streaming data too.Kinesis makes it easy to load and analyze streaming data, and also providing the ability for you to build your own custom applications for your business needs.
+2. Kinesis Core Services
+	2.1 Kinesis Streams
+		2.1.1 Kinesis streams consist of shards
+		2.1.2 Five transactions per second for reads, upto a maximum total data read rate 2MB per second and upto 1000 records per second for writes,  upto maximum total data write rate of 1MB per second (including partition keys)
+		2.1.3 The data capacity of your stream is a function of the number of shards that you specify for the stream.The total capacity of the stream is the sum of the capacities of its shards.
+		2.1.4 In Knesis streams you can retain data produced by producers for 24 hours by default.But the retention period can be increased upto 7 days. 
+	2.2 Kinesis Firehose
+		2.2.1 Kinesis Firehose is more automated than Kinesis Strems.You do not have to deal with shards.You can choose to analyze the data produced automatically using lambda and the data is transferred to S3, RedShift etc. 
+	2.3 Kinesis Analytics
+		2.3.1 Kinesis Analytics enables you to fire SQL like queries on data stored via kinesis.
+
+
+
+************************************************************************************************************************************************
+Overview of Amazon AWS - White Paper
+	
+1. What is Cloud Computing - Cloud computing is the on demand delivery of IT resources and applications via internet with pay as you go pricing.Cloud computing provides a simple way to access servers, storage, databases and a broad set of application services over the internet.Cloud computing providers such as AWS own and maintain the network-connected hardware required for these application services, while you provision and use what you need using a web application.
+
+2. Advantages of cloud
+	2.1 Trade capital expenses for variable expenses.
+	2.2 Benefit from massive economies of scale.
+	2.3 Stop guessing about capacity
+	2.4 Increase speed and agility
+	2.5 Stop spending money running and maintaining datacenters.
+	2.6 Go global in minutes
+
+*************************************************************************************************************************************************
+
+Overview of security processes - White Paper
+
+1. Shared Security Model- AWS is responsible for securing the underlying infrastructure that supports  the cloud, and you are responsible for anything that you put  on the cloud or connect to the cloud. 
+
+2. Provides protection against
+	2.1 DDoS
+	2.2 Man in the middle attacks
+	2.3 IP Spoofing
+	2.4 Port Scanning
+	2.5 Packet sniffing by other tenants
+
+3. Unauthorized port scans by Amazon EC2 customers are violation of AWS Acceptable Use Policy.You may request permission to conduct vulnerability scans as required to meet your specific compliance requirements.These scans must be limited to your own instances and must not violate the AWS Accptable Use Policy.You must request a  vulnerability scan in adcance.
+
+4. AWS Trusted Advisor Service- Inspects your AWS environment and makes recommendations when opportunities may exist to save money, improve system performace, or close security gaps.It provides alerts on several of the most common security misconfigurations that can occur, including leaving certain ports operating that make you vulnerable to hacking and unauthorized access, neglecting to create IMA accounts for  your internal users, Allowing public access to amazon s3 buckets, not turning on user activity loggin (AWS CloudTrail) and not using MFA on your root AWS Account.
+
+
+5. Instance Isolation - 
+	5.1 Different instances running on the same physical machine are isolated from each other via the Xen Hypervisor.In addition, the AWS firewall resides within the hypervisor layer, between the physical network interface and instance's virtual interface.
+	5.2 All packets must pass through this layer, thus an instance's neighbors have no more access to that instance than any other host on the internet can be treated as if they are on separate physical hosts.The Physical RAM is separated using similar mechanisms.
+	5.3 Customer instances have no access to raw disk devices, but instead are presented with virtual disks.The AWS proprietary disk virtualization layer automatically resets every block of storage used by the customer, so that one's customer data is never unintentionally exposed to another.
+	5.4 In addition, memory allocated to guests is scrubbed (set to zero) by the hypervisor when it is unallocated to a guest.The memory is not returned to the pool of free memory available for new allocations until the  memory scurbbing is complete.
+
+
+6. Other Considerations
+	6.1 Guest Operating System - Virtual instances are completely controlled by you, the customer.You have full root access or administrative control over accounts, services, and applications.AWS does not have any access rights to your instances or the guest OS.Ecryption of sensitive data is generally a good security practice, and AWS provides the ability to encrypt the EBS volumes and their snap shots with AES-256.The encryption occurrs on the servers that host the EC2 instances, providing encryption of data as it moves between EC2 instances and EBS storage.In order to be able to this efficiently and with low latency, the EBS encryption feature is only available on EC2s more powerful instance types (eg M3,C3,R3,G2)
+
+	6.2 Elastic Load Balancing - SSL termination on load balancer is supported.Allows u to identify the originating IP address of a client connecting to your servers, whether you are using httts or TCP load balancing.
+
+	6.3 Firewall - Amazon EC2 provides a complete firewall solution.This mandatory inbound firewall is configured in a default deny-all mode and Amazon EC2 customers must explicitly open the ports  needed to allow inbound traffic.
+
+************************************************************************************************************************************************
+
+Storage Options in Cloud - White Paper
+
+1. Storage Gateway
+	1.1 AWS Storage Gateway's software appliance is available for download as a virtual machine (VM) image that you install on a host in your datacenter.Once you have installed your gateway and associated it with your AWS account through our activation process, you can use the AWS management console to create either 	
+		* gateway-cached
+		* gateway-stored
+	that can be mounted as iSCSI devices by your on premises application.
+	1.2 Gateway-Cached - It allows you to utilize amazon s3 for your primary data, while retaining some portion of it locally in a cache for frequently accessed data.These volumnes minimize the need to scale your on premises storage infrastructure, while still providing your applications with low latency access to their frequently accessed data.You can create storage volumes upto 32TBs in size and mount them as iSCSI devices from your on premises application servers.Data written to these volumes is stored in S3, with only the cache of recently written and recently read data stored locally on your on premises storage hardware.
+	1.3 Gateway-Stored - It stores your primary data locally, while asynchronously backing up the data to AWS.These volumes provide your on premises applications with low latency access to their entire datasets, while providing durable, off site backups.You can create storage volumes upto 1 TB size and  mount them as iSCSI devices from your on premises application servers.Data written to your gateway-stored volumes is stored on your on premises storage hardware, and asynchronously backed up to amazon S3 in the form of AMAZON EBS snapshots.  
+	1.4 Pricing - With AWS Storgae Gateway , you only pay for what you use.AWS storage gateway has four pricing components:gateway usage(per gateway per month), snapshot storage usage(per GB per month), volumne storage usage(per GB per month), and data transfer out (per GB per month).
+
+*************************************************************************************************************************************************
+
+Architechting For AWS Cloud - Best Practices - White Paper
+
+Benefits of cloud
+	1. Almost 0 upfront infrastructure investment
+	2. just-in-time infrastructure
+	3. More efficient resource utilization
+	4. Usage-based costing
+	5. Reduced time to market
+
+Technical Benefits
+	1. Automation - Scriptable Infrastructure
+	2. Auto-Scaling
+	3. Proactive Scaling
+	4. More efficient development cycle
+	5. Improved testability
+	6. Disaster recovery and Business continuity
+	7. "Overflow" the traffic to the cloud
+
+Design For Failure
+	1. Rule of Thumb: Be a pessimist  when designing architectures in the cloud.Assume that things ll fail.In the other words, always design, implement and deploy for automated recovery from failure.In Particular, assume that your hardware will fail.Assume that outages ll occur.Assume that some disaster ll strike your application.Assume that you ll be slammed with more than the expected number of requests per second some day.Assume that with time your application software ll fail too.By being a pesimist, you end up thinking aboubt recovery strategies during design time, which helps in designing an overall system better.
+
+Decouple Your Components
+	1. The key is to build components that do not have tight dependencies on each other, so that if one component were to die (fail), sleep (not respond) or remain busy (slow to respond) for some reason, the other component in the system are built so as to continue to work as if no failure is happening.
+	2. In essence, loose coupling isolates the various layers and components of your application so that each component intracts asynchronously with the others and treats them as a "black box".
+
+Implement Elasticity
+	1. Elasticity can be implementd in 3 ways
+		1. Proactive cyclic scaling - Periodic scaling that occurs at fixed interval (daily,weekly,monthly,quaterly)
+		2. Proactive Event Based Scaling - Scaling just wen you are expecting a big surge of traffic requests due to a scheduled business event (new product launch, marketing campaingns)
+		3. Auto Scaling based on demand - By using a monitoring service, your system can send triggers to take appropriate actions so that it scales uo or down based on metrics (utilization of servers or network i/o , for instance)		  	
+
+*************************************************************************************************************************************************
+The Well Architected Framework - White Paper
+
+- What is a Well Architected Framework
+	1. The well architected framework is a set of questions that you can use to evaluate how well your architecture is aligned to AWS best practices.
+
+- 5 Pillars of the well architected framework.
+	1. Security
+		1.1 Design Principle
+			1.1.1 Apply security at all layers.
+			1.1.2 Enable tracebility
+			1.1.3 Automate responses to security events
+			1.1.4 Focus on securing your system
+			1.1.5 Automate security best practices
+			1.1.6 
+		1.2 Definition
+			1.2.1 Security in cloud consist of 4 areas
+				1.2.1.1 Data Protection - 
+						* Before you begin to architect security practices across your environment, basic data clasification should  be in place.You should organize and classiy your data into segments such as publicly available, available to only members of your organisation, available to only certain members of your organisation, available only to the board etc.You should also implement a least privilege access system so that people are only able to access what they need.However, most importantly you should encrypt everything whereever possible, whether it is at rest or in transit.
+						* Data Protection Questions
+							- How are you encrypting anf protecting your data at rest ?
+							- How are you encrypting anf protecting your data in transit ? (SSL)
+				1.2.1.2 Privilege Management
+						* Privilenge meanagement ensures that only authorized and authenticated users are able to access your resources, and only in a manner that is intended.It can include
+							- Access Control Lists (ACLs)
+							- Role Based Access Controls
+							- Password Management  (Such as password rotation policy)
+						* Privilege Management Questions
+							- How are you protecting access to and use of the AWS root account credentials ?
+							- How are you defining roles and responsibilites of system users to control human access to the AWS management console and APIs ?	
+							- How are limiting automated access (such as applications, scripts, or third party tools or services) to AWS resources ?
+							- How are you managing keys and credentials ?
+				1.2.1.3 Infrastructure protection
+						* Outside of cloud, this is how you protect your datacenter.RFID controls,security,locable cabinets, cctv etc.Within AWS they handle this.So,  really infrastructure exists at a VPC level. 
+				1.2.1.4 Detective Controls	
+
+	2. Reliability
+	3. Performance Efficiency
+	4. Cost Optimization
+	5. Operational Excellence
+
+- Structure of Each Pillar
+	1. Design Principles
+	2. Definition
+	3. Best Practices
+	4. Key AWS Services
+	5. Resources
+
+- General Design Principles
+	1. Stop guessing your capacity needs.
+	2. Test Systems at Production Scale
+	3. Automate to make acrhitectural experimentation easier
+	4. Allow for evolutionary architectures
+	5. Data driven architechtures
+	6. Improve through game days
+
+ 	
+
+The four levels of AWS premium support
+	1. Basic 
+	2. Developer
+	3. Business - The maximum response time for a Business Level Premium Support Case is 1 hour
+	4. Enterprise
+
+ 
+
+The AWS platform is certified PCI DSS 1.0 compliant
+
+The AWS platform consists of 14 regions currently	
