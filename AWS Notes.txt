@@ -50,7 +50,10 @@ S3 Service :-
 19. S3 buckets can be confogured to create access logs.The logs can be logged in to another bucket of same account or any other account.
 20. When u write successfully to S3 , you get http 200 response code
 21. Files can be loaded in S3 faster by enabling multipart upload.
-22. Read S3 FAQ  
+22. When trying to grant an amazon account access to S3 using access control lists,The email address of the account or the canonical user ID should be used to identify the account.
+23. Export to amazon glacier is not supported by AWS Import/Export
+24. AWS Import/Export allows for the importation of large data sets, using external hard disks which are sent directly to amazon, therefore bypassing the internet.
+25. Read S3 FAQ  
 
 
 * Storage Tiers/Classes
@@ -132,7 +135,7 @@ EC2 Service :-
 	8.5 Attach the newly created volume to EC2
 	8.6 Mount the volume.
 	8.7 Hence the data in the already attached volume is retained and the type of vol/ume is also upgraded 	
-9. Meta data URL 
+9. Meta data URL - it gives u the instance's meta-data and not the user data
 		http://169.254.169.254/latest/meta-data/
 
 10. Bash Script
@@ -164,7 +167,9 @@ EC2 Service :-
 
 14. Reserved instances are available for multi-az deployments.
 
-15. The underlying Hypervisor for EC2 is "XEN"
+16. Para-Virtual (PV) & Hardware Virtual Machine (HVM) are the different types of virtualization available on EC2.
+
+17. The underlying Hypervisor for EC2 is "XEN"
 Note- Go through EC2 FAQ
 
 
@@ -209,10 +214,11 @@ EBS Service :-
 		18.2 For EBS volumes ,The root device for an instance launched from the AMI is an Amazon EBS volume created from an amazon EBS snapshot.
 		18.3 For Instance Store Volumes,  The root device for an instance launched from the AMI is an instance store volumne created from a template stored in  Amazon S3.
 		18.4 Instance store volumes are sometimes called as Ephemeral Storage.
-		18.5 Instance store volumes cannot be stopped , if the underying host fails , you ll lose your data.
-		18.6 EBS backed instances can be stopped , You ll not lose the data on this instance if it is stopped.
+		18.5 Instance store volumes cannot be stopped , if the underying host fails , you ll lose your data.This means instance store backed volumes are not persistent.
+		18.6 EBS backed instances can be stopped , You ll not lose the data on this instance if it is stopped.This means EBS backed volumes are persistent.
 		18.7 You can reboot both instance store and EBS backed , You ll not lose your data.
 		18.8 With instance store ,by default the root volumes ll be deleted on termination.However, with EBS volumes you can tell AWS to keep the root device volume.
+		18.9 EBS volumes can be dettached and reattached to other EC2 instances,You cannot do the same with instance store volumes they exist only for the life of that instance. 
 	19. Volumes vs Snapshots
 		19.1 Volumes exist on EBS (i.e on virtual hard disks)
 		19.2 Snaphot exist on S3.
@@ -246,11 +252,20 @@ VPC
 	5.2 All subents in default VPC have a route out to the internet.
 	5.3 Each EC2 instance have both a public and private IP address.
 	5.4 If u delete the default VPC the only way to get it back is to contact AWS.
-6. VPC Peering
+
+6. VPC Peering - VPC peering is simply a connection between 2 VPCs that enables you to route traffic between them using private IP addresses.Instances in either VPC can communicate with each other as if they are within the same network.You can create a VPC peering connection between your own VPCs, or within a VPC in another AWS  account but within a single region.AWS uses the existing infrastructure of a VPC to create a VPC peering connection,It is niether a gateway nor a VPN connection, and does not rely on a separate piece of physical hardware.There is no single point of failure for communi]cation or a bandwidth bottlenecking
+
 	6.1 Allows you to connect one VPC with another via a direct network route using private IP addresses.
 	6.2 Instances behave as if they are om the same private network.
-	6.3 You can peer VPC's with other AWS accounts as well as with other VPCs in the same account.
+	6.3 You can peer VPC's with other AWS accounts as well as with other VPCs in the same account but within a same region.
 	6.4 Peering is in a star configuration, i.e 1 central VPC peers with 4 others. No Transitive Peering (i.e one VPC cannot talk to other VPC via a third VPC)
+	6.5 VPC Peering Limitations
+		6.5.1 You cannot create a VPC peering connection between VPCs that have matching or overlapping CIDR blocks.
+		6.5.2 You cannot create a VPC peering connection between VPCs in different regions.
+		6.5.3 VPC peering does not support transitive peering relationships. 
+
+
+
 7. Think of a VPC as logical datacenter in AWS	
 8. It consists of IGW's (Internet Gateway or Virtual Private Gateways), Route Tables, Network Access Control Lists, Subnets, Security Groups.
 9. One VPC can only have one Internet Gateway.You cannot configure multiple internet gateways to a VPC.
@@ -751,7 +766,7 @@ SNS Service
 Elastic Transcoder
 
 1. Elastic transcoder is a Media Transcoder in the cloud. 
-2. Convert media files from their original source format into different different formats that ll play in smart phones, tablets , PCs etc.It provides transcoding presets for popular output format, which means that u dont neet to guess about which setting work best on a particular devices.
+2. Convert media files from their original source format into different different formats that ll play in smart phones, tablets , PCs etc.It provides transcoding presets for popular output format, which means that u dont need to guess about which setting work best on a particular devices.
 3. You can pay based on the minutes that u transcode and the resolution at which you transcode.
 4. Read a blog about Elastic transcoder at link "https://read.acloud.guru"
 
@@ -776,21 +791,128 @@ API Gateway
 
 Kinesis 
 
-1. Amazon Kinesis is a platform on AWS to send your streaming data too.Kinesis makes it easy to load and analyze streaming data, and also providing the ability for you to build your own custom applications for your business needs.
-2. Kinesis Core Services
-	2.1 Kinesis Streams
-		2.1.1 Kinesis streams consist of shards
-		2.1.2 Five transactions per second for reads, upto a maximum total data read rate 2MB per second and upto 1000 records per second for writes,  upto maximum total data write rate of 1MB per second (including partition keys)
-		2.1.3 The data capacity of your stream is a function of the number of shards that you specify for the stream.The total capacity of the stream is the sum of the capacities of its shards.
-		2.1.4 In Knesis streams you can retain data produced by producers for 24 hours by default.But the retention period can be increased upto 7 days. 
-	2.2 Kinesis Firehose
-		2.2.1 Kinesis Firehose is more automated than Kinesis Strems.You do not have to deal with shards.You can choose to analyze the data produced automatically using lambda and the data is transferred to S3, RedShift etc. 
-	2.3 Kinesis Analytics
-		2.3.1 Kinesis Analytics enables you to fire SQL like queries on data stored via kinesis.
+1. Amazon Kinesis is a fully managed service for real time processing of streaming data at massive scale.You can configure hundreds of thousands of data producers to continously put data into Amazon Kinesis streams.For eg data from website click streams, application logs and social media feeds.Within les than a second, the data ll be available for you Amazon Kinesis Applications to read and process from the stream.Amazon Kinesis is a platform on AWS to send your streaming data too.Kinesis makes it easy to load and analyze streaming data, and also providing the ability for you to build your own custom applications for your business needs.
+
+2. What Kinesis Is ?
+	2.1 Used to consume big data
+	2.2 Stream large amount of social media,news feeds logs etc into the cloud
+
+
+3. Kinesis Core Services
+	3.1 Kinesis Streams
+		3.1.1 Kinesis streams consist of shards
+		3.1.2 Five transactions per second for reads, upto a maximum total data read rate 2MB per second and upto 1000 records per second for writes,  upto maximum total data write rate of 1MB per second (including partition keys)
+		3.1.3 The data capacity of your stream is a function of the number of shards that you specify for the stream.The total capacity of the stream is the sum of the capacities of its shards.
+		3.1.4 In Knesis streams you can retain data produced by producers for 24 hours by default.But the retention period can be increased upto 7 days. 
+	3.2 Kinesis Firehose
+		3.2.1 Kinesis Firehose is more automated than Kinesis Strems.You do not have to deal with shards.You can choose to analyze the data produced automatically using lambda and the data is transferred to S3, RedShift etc. 
+	3.3 Kinesis Analytics
+		3.3.1 Kinesis Analytics enables you to fire SQL like queries on data stored via kinesis.
+
+
+
+Note -  Consuming data - think of kinesis (news feeds)
+        Business Intelligence - Think of Redshift
+        Big Data Processing - Think of Elastic Map Reduce.Elastic Map Reduce allows you root access (i.e u can login using ssh)
 
 
 
 ************************************************************************************************************************************************
+OpsWorks Service
+	1. Orchestration service that uses chef 
+	2. chef consist of recepies to maintain a consistent state.
+	3. Look for the term "chef" or "recepies" or "cook books" and think OpsWork
+
+************************************************************************************************************************************************
+AWS Organizations 
+	1. It is an account management service that enables u to consolidate multiple AWS accounts into an organization that you create and centrally manage.
+	2. It is available in 2 feature set Alhough u can have billing alerts on individual linked accounts as well.
+		2.1 Consolidated Billing
+			2.1.1 Consolidated billing allows you to get volumne discounts on all your accounts.
+			2.1.2 Unused reserved instances for EC2 are applied across the group.
+			2.1.3 CloudTrail is on per account and per region basis but can be aggregated into a single bucket in the paying account.
+		2.2 All features
+	3. At present , by default u can have 20 linked accounts under one paying account.
+	4. Billing Alerts - When monitoring is enabled on the paying account the billing data for all linked accounts is included.Alhough u can have billing alerts on individual linked accounts as well.
+	5. Cloud trail is Per Account and is enabled per region.You can consolidate logs using an S3 bucket.
+		5.1 Turn on cloud trail in the paying account.
+		5.2 Create a bucket policy that allows cross account access 
+		5.3 Turn on cloud trail in the other accounts and use the bucket in the paying account.
+
+
+************************************************************************************************************************************************
+
+What are Resource Groups ?
+	1. Resource group make it easy to group your resources using the tags that are assigned to them.You can resources that share one or more tags.
+	2. Resources groups contain information such as 
+		2.1 Region
+		2.2 Name 
+		2.3 Health Checks
+	3. Specific Information
+		3.1 For EC2 - Public and Private IP addresses
+		3.2 For ELB - Port Configurations
+		3.3 For RDS - Database Engine etc
+
+************************************************************************************************************************************************
+Direct Connect
+	1. AWS Direct Connect makes ot easy to establish a dedicated network connection from your premises to AWS.Using AWS Direct Connect, You can establish private connectivity between AWS and datacenter, office, or colocation environment which in many cases can reduce your network cost, increase bandwidth throughput and provide a more consistent network experience than internet based connections.
+	2. Benefits
+		2.1 Reduces cost when using large volumes of traffic
+		2.2 Increase Reliability
+		2.3 Increase Bandwidth
+	3. Direct Connects are available in 
+		3.1 10gbps
+		3.2 1gbps
+		3.3 Sub 1gbps can be purchased through AWS Direct Connect Partners
+	4. Direct Connect uses VLAN trunking (802.1Q)
+
+
+************************************************************************************************************************************************
+Security Token Service (STS)
+	1. Grants users limited and temporary access to AWS resources.
+	2. Users can come from 3 sources.
+		2.1 Federation (typically active directory)
+			* Uses security assertion markup language.
+			* Grants temporary access based off the users Active Directory Credentials.Does not need to be a user in IAM.
+			* Single sign on allows users to log in to AWS console without assigning IAM credentials.
+		2.2 Federation with Mobile Apps
+			* Uses Facebook/Amazon/Google or other openID providers to log in 
+		2.3 Cross Account Access
+			* Lets users from one AWS acount access resources in another.
+	3. Key Terminology
+		3.1 Federation - Combining or joining a list of users in one domain (such as IAM) with a list of users in another domain (such as Active Directory , Facebook etc)
+		3.2 Identity Broker - A service that allows you to take an identity from point A and join it (federate it) to point B
+		3.3 Identity Store - Services like Active Directory, Facebook, Google
+		3.4 Identities - A user of service like Facebook etc.
+	4. Scenario -  You are hosting a company website on some EC2 web servers in your VPC.Users of this website must login to the site which then authenticates against the company's active directory servers which are based on site at the companies headquaters.Your VPC is connected to your company HQ via a secure IPSEC VPN.Once logged in the users can only have access to their own S3 buckets.How do you set up  this ?
+		4.1 Employees encode the username and password into the portal.
+		4.2 These credentials are then forwarded to Identity Broker.
+		4.3  Identity Broker checks for the password credentials in company's LDAP server
+		4.4 If the credentials are valid identity broker makes a call to AWS STS 
+		4.5 STS authenticates and returns temporary security credentials.It contains following 4 things
+			* Access Key
+			* Secret Access Key
+			* Token
+			* Duration for which the token is valid.This duration can be between 1 and 36 hours.
+		4.6 Once the Identity Broker has that it returns the same to the Portal Application
+		4.7 Portal Application makes a call to S3 passing the credentials 
+		4.8 S3 uses IAM to verify credentials passed by portal application.If credentials are valid, it allows the requested operation
+
+
+
+************************************************************************************************************************************************
+Workspaces
+	1. It's basically a VDI.A workspace is a cloud based replacement for a traditional desktop.A workspace is available as a bundle of compute resources, storage space, and software application access that allow a user to perform day-to-day tasks just like using a traditional desktop.A user can connect to a workspace from any supported device (PC,MAC,Chromebook,iPAD,Andrroid Tablets) using free Amazon workspaces client application and credentials set up by an administrator or  their exsting active directory credentials if Amazon Workspaces is integrated with an existing Active Directory Domain.
+	2. Windows 7 experience, provided by windows server 2008 R2.
+	3. By default, users can personalize their workspaces with their favorite settings for items such as wallpaper, icons, shortcuts etc.This can be locked down by an administrator however.
+	4. By default u ll be given a local administrator access,you can install your own applications.
+	5. Workspaces are persistent.
+	6. All data on D:/ is backed up every 12 hours.
+	7. You do not need an AWS account to login to workspaces.	  
+
+
+************************************************************************************************************************************************
+
 Overview of Amazon AWS - White Paper
 	
 1. What is Cloud Computing - Cloud computing is the on demand delivery of IT resources and applications via internet with pay as you go pricing.Cloud computing provides a simple way to access servers, storage, databases and a broad set of application services over the internet.Cloud computing providers such as AWS own and maintain the network-connected hardware required for these application services, while you provision and use what you need using a web application.
@@ -803,7 +925,38 @@ Overview of Amazon AWS - White Paper
 	2.5 Stop spending money running and maintaining datacenters.
 	2.6 Go global in minutes
 
-*************************************************************************************************************************************************
+************************************************************************************************************************************************
+
+Elastic Container Service (ECS)
+
+ECS is Amazon's Docker Management Service.Allows you to manage docker containers on a cluster of EC2s
+
+	1. What is Docker 
+		* Docker is a software platform that allows u to build, test and deploy applications quickly.
+		* Docker is highly reliable.You can quickly deploy and scale applications into any environment and know your code ll run.
+		* Docker is infinitely scalable.Running docker on AWS is a great way to run distributed applications at any scale.
+		* Docker packages software into standardized units called containers.Containers allows u to easily package an application's code, configuration and dependencies into easy to use building blocks that deliver environmental consistency, operation efficiency, developer productivity and version control.
+
+	2. Containarization Benefits
+		* Escape from dependancy hell
+		* Consistent progression from DEV -> Test -> QA -> Prod
+		* Isolation - performance and stability in App A in Container A , wont affect App B in container B.
+		* Much better resource management
+		* Extreme code portability
+		* Micro services
+
+	3. Docker Coponents
+		* Docker Image
+		* Docker Container
+		* Layer/Union File System
+		* Docker File
+		* Docker Daemon/Engine
+		* Docker Client
+		* Docker Registries/Docker Hub	  
+
+Note - Read FAQs
+
+************************************************************************************************************************************************
 
 Overview of security processes - White Paper
 
@@ -847,6 +1000,7 @@ Storage Options in Cloud - White Paper
 	1.2 Gateway-Cached - It allows you to utilize amazon s3 for your primary data, while retaining some portion of it locally in a cache for frequently accessed data.These volumnes minimize the need to scale your on premises storage infrastructure, while still providing your applications with low latency access to their frequently accessed data.You can create storage volumes upto 32TBs in size and mount them as iSCSI devices from your on premises application servers.Data written to these volumes is stored in S3, with only the cache of recently written and recently read data stored locally on your on premises storage hardware.
 	1.3 Gateway-Stored - It stores your primary data locally, while asynchronously backing up the data to AWS.These volumes provide your on premises applications with low latency access to their entire datasets, while providing durable, off site backups.You can create storage volumes upto 1 TB size and  mount them as iSCSI devices from your on premises application servers.Data written to your gateway-stored volumes is stored on your on premises storage hardware, and asynchronously backed up to amazon S3 in the form of AMAZON EBS snapshots.  
 	1.4 Pricing - With AWS Storgae Gateway , you only pay for what you use.AWS storage gateway has four pricing components:gateway usage(per gateway per month), snapshot storage usage(per GB per month), volumne storage usage(per GB per month), and data transfer out (per GB per month).
+	1.5 Gateway-Accessed volumes is not a valid configuration type for AWS storage gateways
 
 *************************************************************************************************************************************************
 
@@ -914,12 +1068,127 @@ The Well Architected Framework - White Paper
 							- How are limiting automated access (such as applications, scripts, or third party tools or services) to AWS resources ?
 							- How are you managing keys and credentials ?
 				1.2.1.3 Infrastructure protection
-						* Outside of cloud, this is how you protect your datacenter.RFID controls,security,locable cabinets, cctv etc.Within AWS they handle this.So,  really infrastructure exists at a VPC level. 
+						* Outside of cloud, this is how you protect your datacenter.RFID controls,security,locable cabinets, cctv etc.Within AWS they handle this.So,  really infrastructure exists at a VPC level.
+						* Infrastructure protection Questions 
+							- How are you enforcing network and host-level boundary protection ?
+							- How are enforcing AWS service level protection ?
+							- How are you protecting the integrity of the operating systems on your Amazon EC2 instances ?
 				1.2.1.4 Detective Controls	
-
+						* You can use detective controls to detect or identify a security breach.AWS services to achieve this includes 
+							- AWS cloud trail 
+							- AWS cloud watch
+							- AWS config
+							- AWS S3
+							- AWS Glacier
+						* Detective Controls Questions
+							- How are you capturing and analyzing AWS logs ?	
+					
+ 
 	2. Reliability
+		2.1 The reliability pillar covers the ability of the system to recover from service or infrastrucutre outgaes/disruptions as well as the ability to dynamically acquire computing resources to meet demand.
+		2.2 Design Principles
+			* Test Recovery Procedures
+			* Automatically recover from failures
+			* Scale horizontally to increase aggregate system availability
+			* Stop guessing capacity
+		2.3 Definition
+			* Reliability in cloud consists of 3 areas
+				- Foundations
+					- In traditional IT, one of the first things you should consider is the size of the communication link between ur headquaters and ur datacenter.If u misprovision this link, it can take 3-6 months to upgrade which can cause a huge disruption to your traditional IT estate.
+					- With AWS, they handle most of the foundations for you.The cloud is designed to be esentially limitless meaning the AWS handles the networking and compute requirements themselves.However, they do set service limits to stop customers from accidently over-provisioning resources.
+				- Foundations Questions
+					- How are you managing AWS service limits for your account ?
+					- How you are planning your network topology on AWS ?
+					- Do you have an escalation path to deal with technical issues ?
+				- Change Management
+					- You need to be aware of how change affects system so that u can plan proactively around it.Monitoring allows u to detect any any changes to your environment and react.In traditional systems, change control is done manually and are carefully co-ordinated with auditing.With AWS things are lot easier, you can use cloud watch to monitor your environment and services such as auto scaling to automate change in response to changes on your production environment.
+				- Change Management Questions 
+					- how does your system adapt to changes in demand ?
+					- How are you monitoring AWS resources ?
+					- How are you executing change management ?
+				- Failure Management	
+					- With cloud, you should always architect your systems with the assumptions that failure will occur.You should become aware of these failures, how they occurred and how to respond to them and then plan on how to prevent these from happening again.
+				- Failure Management Questions
+					- How are you backing up your data ?
+					- How does your system withstand component failures ?
+					- How are you planning for recovery ?
+
 	3. Performance Efficiency
+		3.1 The performance efficiency pillar focus on how to use computing resources efficiently to meet your requirements and  how to maintain that efficeincy as demand changes and technology evoles.
+		3.2 Design Principles
+			* Democratize advanced technologies.
+			* Go global in minutes
+			* Use serverless architechtures
+			* Experiment more often
+		3.3 Definition
+			* Compute 
+				- When architecting with your system it is important to choose right kind of server.Some apps require heavy CPU utilization, some require heavy memory utilization etc.
+				- With AWS servers are virtualized with a click of a button (API calls).You can change the type of server in which your environmnt is running on.You can even switch to running with no servers at all and use AWS lambda.
+			* Compute Questions
+				- How do you select the appropriate instance type for your system ?
+				- How do you ensure that you continue to have the most appropriate instance type as a new instance types and features are introduced ?
+				- How do you monitor youu instance post launch to ensure that they are performing as expected ?
+				- How do you ensure that the quantity of your instances matches demand ?
+			* Storage
+				- The optimal storage soltions for your environment depends on number of factors.
+					* Access Method - Block, File or Object
+					* Patters of Access - Ramdom or Sequential
+					* Throughput Required
+					* Frequency of Access - Online,Offline or Archival
+					* Frequency of Update - Worm, Dynamic
+					* Availability Contraints
+					* Durability Constraints
+				- Storage Questions 
+					* How do you select the appropriate storage solution for your system ?
+					* How do you ensure that you continue to have the most appropriate storage solution as new storage solutions and features are launched ?
+					* How do you monitor your storage solution to ensure that it is performing as expected ?
+					* How do you ensure that the capacity and throughput of your storage solutions matches demand ?
+
+			* Database
+				- The optimal solution depends on a number of factors.Do you need database consistency, do u need high availability, do you need No-SQL, Do you need DR etc ?
+				- With AWS you get a LOT of options.RDS, DynamoDB, Redshift etc.
+			* Database Questions 
+				- How do you select the appropriate database solution for your system ?
+				- How do you ensure that you continue to have the most apropriate database solution and features as new database solution and features are launched ?
+				- How do you monitor your databases to ensure performance is as expected ?
+				- How do you ensure the capacity and throughput of ur databases matches demand ?	
+			* Space-time tradeoff	 
+				- Questions 
+					* How do u select the appropriate proximity and caching solutions for your system ?
+					* How do you ensure that u continue to have the most appropriate proximity and caching solutions as new solutions are launched ?
+					* How do u monitor ur proximity and caching solutions to ensure performance is as expected ?
+					* How do u ensure that the proximity and caching solutions you have matches demand ?
+
 	4. Cost Optimization
+		4.1 Use cost optimization pillar to reduce your cost to an minimum and use those services for other parts of your business.A cost optimized system allows u to pay the lowest price possible while still achieving your business objectives.
+		4.2 Design Principles
+			* Transparently attribute expenditure
+			* Use managed services to reduce cost of ownership
+			* Trade capital expense for operating expense.
+			* Benefit from economies of scale.
+			* Stop spending money on data center operations.
+		4.3 Definition
+			* Cost optimization in cloud consist of 4 areas
+				- Matched supply and demand
+					* Try to optimally align supply with demand.Dont over provision or under provision, instead as demand grows , so should the supply of your compute resources.Like Autoscaling which scale with demand.Similarly , in a serverless context, use services such as  Lambda that only execute when a request comes in.Services such as cloud watch can also help you keep track as to what your demand is.
+				- Matched supply and demand questions 
+					* How do you make sure your capacity matches but does not substantially exceed what u need ?
+				- Cost-Effective Resources
+					* Using a correct instance type can be a key to cost savings.For eg you might have a reporting process that is running on a t2.micro and it takes 7 hours to complete.The same process can be run on  an  m4.2xlarge in few minutes.The result is same but t2.micro is expensive because it ran fr longer.A well archoitected system will use most cost effiient resources to reach the eand business goal.
+				- Cost-Effective Resources Questions
+					* Have you selected the appropriate resource types to meet your costs targets ?
+					* Have u selected the appropriate pricing model to meet ur cost targets ?
+					* Are there managed services (EC2,EBS,S3) that u can use to improve ROI ?
+				- Expenditure Awareness
+					* With cloud u no longer have to go out and get quotes on physical servers,choose a supplier,have those resources delivered, installed and made available etc.You can provision things within seconds, however it comes with its own issues.Many organizations have different teams each with their own  AWS accounts.Being aware of what each team is spending and where is very crucial to any well architected  system.You can use cost allocation tags to track this, Billing alerts as well as consolidated billing.
+				- Expenditure Awareness Questions
+					* What access controls and procedures do u have in place to govern AWS cost ?
+					* How are you monitoring usage and spending ?
+					* How do u decommision resources that u no longer need, or stop resources that are temporarily not needed ?
+					* How do u consider data transfer charges when designing your architecture ? 	
+
+				- Optimizing Overtime
+
 	5. Operational Excellence
 
 - Structure of Each Pillar
