@@ -37,7 +37,7 @@ S3 Service :-
 
 12 Life cycle management 
 	12.1 It can be used in conjuction wih versioning  or can be used independently
-	12.2 Can be applied to all current versions and previous versions
+	12.2 Can be applied to all current versions and previous versions.Object should be minimum of 128kb.
 	12.3 Following actions for eg can be done 
 		12.3.1 Transition to standard infrequent access - 30 days after the date of creation.File size must be atleast 128KB in size
 		12.3.2 Archive to glacier (30 days after moving into IA)
@@ -129,12 +129,12 @@ EC2 Service :-
 	2.1 On Demand - Allows u to pay fix rate by hour (or by second) with no commitment.Currently by seconds only for linux instances
 	2.2 Reserved - Provides u with the capacity reservation , and offer a significant discount on hourly charges for an instance.1 year or 3 years term
 		2.2.1 Standard RI (Reserved Instances) - Upto 75% off on demand
-		2.2.2 Convertible RI (Reserve Instances) -  Upto 54% off on demand.Capability to change the attributes of he RIs as lonmg as the exchange results in he creation of reserved instances of equal or greater value.
+		2.2.2 Convertible RI (Reserve Instances) -  Upto 54% off on demand.Capability to change the attributes of he RIs as long as the exchange results in he creation of reserved instances of equal or greater value.
 		2.2.3 Scheduled RI (Reserved Instance) -  These are available to launch within the time windows u reserve.Allows u to match ur capacity reservation to a predictable recurring scheules that only requires a fraction of day , week or month
 	2.3 Spot - Enables u to bid whatever price u want for instance capacity,providing for even greater savings if ur applications have flexible start and end times.
 	2.4 Dedicated hosts - Physical EC2 server dedicated for ur use.It helps to reduce cost by allowing u to use your existing sever bound software licenses.
 	2.5 Usecases for On Demand 
-		2.5.1 Users who want low cost and flexibility if EC2
+		2.5.1 Users who want low cost and flexibility of EC2
 		2.5.2 Application with short term,spiky or unpredictable workloads that cannot be interrupted 
 		2.5.3 Applications that are developed or tested on EC2 for the first time.
 	2.6 Usecases for Reserved 
@@ -162,7 +162,7 @@ EC2 Service :-
 	8.4 Create new volume from the snapshot created.Upgrade the volume type
 	8.5 Attach the newly created volume to EC2
 	8.6 Mount the volume.
-	8.7 Hence the data in the already attached volume is retained and the type of vol/ume is also upgraded 	
+	8.7 Hence the data in the already attached volume is retained and the type of volume is also upgraded 	
 9. Meta data URL - it gives u the instance's meta-data and not the user data
 		http://169.254.169.254/latest/meta-data/
 
@@ -173,7 +173,7 @@ EC2 Service :-
 		* yum install httpd -y
 		* service httpd start
 		* chkconfig httpd on
-		* cd /home/www/html
+		* cd /var/www/html
 		* aws s3 cp s3://durgeshlingarkar-dr/welcome.html index.html
 
 11. EC2 Instances Type
@@ -203,7 +203,11 @@ EC2 Service :-
 
 19. By default, all accounts are limited to 5 Elastic IP addresses per region.If you need more the 5 Elastic IP addresses, we ask that you apply for your limit to be raised. Any increases will be specific to the region they have been requested for. 
 
-20. Our SLA (Service Level Agreement) guarantees a Monthly Uptime Percentage of at least 99.95% for Amazon EC2 and Amazon EBS within a Region.
+20. Amazon SLA (Service Level Agreement) guarantees a Monthly Uptime Percentage of at least 99.95% for Amazon EC2 and Amazon EBS within a Region.
+
+21. you cannot delete a snapshot of an EBS Volume that is used as the root device of a registered AMI.you have to first deregister the AMI to do so.
+
+22. Using the console, I cannot add a role to an EC2 instance, after that instance has been created and powered up.
 
 Note- Go through EC2 FAQ
 
@@ -230,7 +234,7 @@ EBS Service :-
 			5.4.3 Cold HDD cannot be boot volumes
 		5.5 Magnetic (Standard)
 			5.5.1 Lowest cost per giga byte of ALL EBS volume types that is bootable.
-			5.5.2 Ideal for workloads where data is access infrequently and lowest storage is imp
+			5.5.2 Ideal for workloads where data is access infrequently and lowest storage cost is imp
 			5.5.3 More or less same as Cold HDD (SC1).The only diff is that it can be used as a boot volume.
 	6. You cannot mount one EBS volumne to multiple EC2 instances.For that u have to use EFS(Elastic File System)
 	7. On termination of EC2 instance the associated EBS is deleted by default.We can configure it to not to do so while launching EC2.
@@ -239,7 +243,7 @@ EBS Service :-
 	10. If you change the volumne on the fly you must wait for 67 hours before making any changes.
 	11. U have to scale EBS volumes up only 
 	12. Volumes must be in the same AZ as that of EC2 instances 
-	13. To create a snapshot for amazon EBS volumes that serves as root devices , you should  stop the instance before taking the snapshot.
+	13. To create a snapshot for amazon EBS volumes that serves as root devices , you should stop the instance before taking the snapshot.
 	14. Snapshots of encrypted volumes are encrypted automatically.
 	15. Volumes restored from encrypted snapshots are encrypted automatically.
 	16. You can share snapshots in market place only if they are not encrypted as the encrytion key is tied to ur AWS account.
@@ -590,7 +594,7 @@ RDS Service
 	7.1 Automated Backups
 		7.1.1 There are 2 diff types of backups for AWS.Automated Backups and Database Snapshots.
 		7.1.2 Automated backups allow you to recover your database to any point in time within a "retention period".Retention period can be between 1 and 35 days.Automated backups ll take a full daily snapshot and ll also store transaction logs throught the day.When u do a recovery, AWS ll choose the most recent daily backup, and  then apply transaction logs relevant to that day.This allows you to do a point in time recovery down to a second, within a retention period.
-		7.1.3 Automated backups are endbaled by default.This backup data is stored in S3 and you get a free storage space equal to the size of your database.So if you have a RDS instance of 10GB you ll get 10GB worth of storage.
+		7.1.3 Automated backups are enabaled by default.This backup data is stored in S3 and you get a free storage space equal to the size of your database.So if you have a RDS instance of 10GB you ll get 10GB worth of storage.
 		7.1.4 Backups are taken within a defined window.During the backup window, storage I/O may be suspended while your data is being backed up and you may experience elavated latency.
 		7.1.5 In RDS, changes to the backup window take effect immediately	
 
@@ -692,8 +696,10 @@ RDS Service
 		14.3.1 MemCached
 			14.3.1.1 A widely adopted memory object caching system.Elasticache is protocol compliant with Memcached, so popular tools that u use today with existing Memcached environments will work seamlessly with the service.
 		14.3.2 Redis
-			14.3.2.1 A popular open source in memory key-value store that supports data structures such as sorted set and lists.Elasticache supports Master/Slave replication and multi AZ which can be used to achieve cross AZ redundancy.
-	14.4 Scenario - Typically u ll be given a scenario where a particular database is under a lot of stress/load. You ll be asked which service you should use to alleviate this.
+			14.3.2.1 A popular open source in memory key-value store that supports data structures such as sorted set and lists.
+
+	14.4 Elasticache supports Master/Slave replication and multi AZ which can be used to achieve cross AZ redundancy.
+	14.5 Scenario - Typically u ll be given a scenario where a particular database is under a lot of stress/load. You ll be asked which service you should use to alleviate this.
 		14.4.1 Elasticache is good choice if ur database is particularly read heavy and not prone to frequent changes.
 		14.4.2 Redshift is good if the reason your database is feeling stress is because management keep running OLAP transactions on it etc.
 
@@ -733,7 +739,7 @@ RDS Service
 28. By default, customers are allowed to have up to a total of 40 Amazon RDS DB instances. Of those 40, up to 10 can be Oracle or SQL Server DB instances under the "License Included" model. All 40 can be used for Amazon Aurora, MySQL, MariaDB, PostgreSQL and Oracle or SQL Server under the "BYOL" model. If your application requires more DB instances, you can request additional DB instances 
 
 
-*************************************************************************************************************************************************
+************************************************************************************************************************************************
 
 SQS (Simple Queue Service)
 1. SQS was the first ever AWS service that was publicly available and hence the oldest service. 
@@ -798,7 +804,7 @@ SNS Service
 	8.4 $2 per 100,000 Notification deliveries over Email.
 9. SES stands for Simple Email Service	
 
-*************************************************************************************************************************************************
+************************************************************************************************************************************************
 
 Elastic Transcoder
 
@@ -1060,11 +1066,12 @@ Overview of security processes - White Paper
 6. Other Considerations
 	6.1 Guest Operating System - Virtual instances are completely controlled by you, the customer.You have full root access or administrative control over accounts, services, and applications.AWS does not have any access rights to your instances or the guest OS.Ecryption of sensitive data is generally a good security practice, and AWS provides the ability to encrypt the EBS volumes and their snap shots with AES-256.The encryption occurrs on the servers that host the EC2 instances, providing encryption of data as it moves between EC2 instances and EBS storage.In order to be able to this efficiently and with low latency, the EBS encryption feature is only available on EC2s more powerful instance types (eg M3,C3,R3,G2)
 
-	6.2 Elastic Load Balancing - SSL termination on load balancer is supported.Allows u to identify the originating IP address of a client connecting to your servers, whether you are using httts or TCP load balancing.
+	6.2 Elastic Load Balancing - SSL termination on load balancer is supported.Allows u to identify the originating IP address of a client connecting to your servers, whether you are using https or TCP load balancing.
 
 	6.3 Firewall - Amazon EC2 provides a complete firewall solution.This mandatory inbound firewall is configured in a default deny-all mode and Amazon EC2 customers must explicitly open the ports  needed to allow inbound traffic.
 
 ************************************************************************************************************************************************
+
 
 Storage Options in Cloud - White Paper
 
@@ -1109,7 +1116,7 @@ Implement Elasticity
 	1. Elasticity can be implementd in 3 ways
 		1. Proactive cyclic scaling - Periodic scaling that occurs at fixed interval (daily,weekly,monthly,quaterly)
 		2. Proactive Event Based Scaling - Scaling just wen you are expecting a big surge of traffic requests due to a scheduled business event (new product launch, marketing campaingns)
-		3. Auto Scaling based on demand - By using a monitoring service, your system can send triggers to take appropriate actions so that it scales uo or down based on metrics (utilization of servers or network i/o , for instance)		  	
+		3. Auto Scaling based on demand - By using a monitoring service, your system can send triggers to take appropriate actions so that it scales up or down based on metrics (utilization of servers or network i/o , for instance)		  	
 
 *************************************************************************************************************************************************
 The Well Architected Framework - White Paper
@@ -1309,10 +1316,21 @@ Question - A client who is using EC2 believes that someone other than approved a
 Ans - You should make use of an OS level logging tools such as iptables and log events to CloudWatch or S3.
 
 
-Set up a traffic logging rule on the network firewall and direct the log to CloudWatch or S3.
+
 
 Route53 has a security feature that prevents internal DNS from being read by external sources. The work around is to create a EC2 hosted DNS instance that does zone transfers from the internal DNS, and allows itself to be queried by external servers.
 
 The public address is not managed on the instance, it is instead an alias applied as a network address translation of the Private IP address.
 
-What is pre warming of Elastic Load Balancer ? Check for this question
+What is pre warming of Elastic Load Balancer ? Check for this question -- Refer link https://petrutandrei.wordpress.com/2016/03/18/pre-warming-the-load-balancer-in-aws/
+
+AWS does not copy launch permissions, user-defined tags, or Amazon S3 bucket permissions from the source AMI to the new AMI.
+
+
+AWS offers 4 different levels of support - Basic, Developer,Business,Enterprise. Refer AWS documentation -- Refer link https://aws.amazon.com/premiumsupport/compare-plans/
+
+checkout link - http://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_RebootDBInstance.html
+
+read more about auto scaling, cloud formation, EMR, resource groups, ECS
+
+Power User Access allows access to all aws services except for management of groups and users within IAM.
