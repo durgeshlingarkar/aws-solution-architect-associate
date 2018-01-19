@@ -1,0 +1,45 @@
+1. File size in S3 can be between 0 to 5 TB.the minimum file size that I can store on S3 is 1 byte
+2. Object should be minimum of 128kb for life cycle management in S3.
+3. By default objects are cached in Edge Location for 24 hours or 86400 seconds.Maximum is 365 days or 31536000 seconds
+4. You can retrive 10 GB of data from amazon glacier per month for free
+5. Standard S3 - Durability of 99.999999999%, Availability of 99.99%. Designed to sustain loss of 2 facilities concurrently
+6. S3 - IA(Infrequent Access) - Durability of 99.999999999%, Availability of 99.9%.
+7. Reduced Redundancy Storage (RRS) - Durability of 99.99%, Availability of 99.99%
+8. Glacier takes up to 3 to 5 hours before accessing
+9. You are limited to running up to at total of 20 On-Demand instances across the instance family, purchasing 20 Reserved Instances, and requesting 20 Spot Instances per your dynamic Spot limit per region.
+10. By default, all accounts are limited to 5 Elastic IP addresses per region.If you need more the 5 Elastic IP addresses, we ask that you apply for your limit to be raised. Any increases will be specific to the region they have been requested for.
+11. Amazon SLA (Service Level Agreement) guarantees a Monthly Uptime Percentage of at least 99.95% for Amazon EC2 and Amazon EBS within a Region.
+12. EBS - Genral Purpose SSD (GP2) Provides 3 IOPS per GB with upto 10000 IOPS.Can burst upto 3000 IOPS
+13. EBS - Provisioned IOPS SSD Shoud be used if needed more then 10000 IOPS.Can provision upto 20000 IOPS per volume
+14. NAT gateways Scales automatically up to 10gbps
+15. 5 VPCs are allowed in each AWS region by default.
+16. Cloud watch Standard monitoring is 5 mins
+17. Cloud watch Detailed monitoring is 1 min
+18. Amazon CloudWatch stores metrics for terminated Amazon EC2 instances or deleted Elastic Load Balancers for 2 weeks.
+19. LAMDA's duration time is maximum of 5 mins.Post which the execution is terminated or timed out.
+20. There is a limit of 50 domain names u can have using Route53, however this limit can be raised by contacting AWS support.
+21. Automated Backup's Retention period can be between 1 and 35 days
+22. You can have upto 5 read replicas copy of any database
+23. DynamoDB is spread across 3 geographically distinct data centres
+24. DynamoDB allows for the storage of large text and binary objects, but there is a limit of 400 KB
+25. In Redshift, single node can be used upto 160GB.
+26. You can have upto 128 compute nodes in multi node setup of Redshift.
+27. Aurora Start with 10GB, scales in 10GB increments to 64TB
+28. Compute resources can scale up to 32vCPUs and 244GB of memory in Aurora.
+29. By default, the maximum provisioned IOPS capacity on an Oracle and MySQL RDS instance (using provisioned IOPS) is 30,000 IOPS.
+30. If you are using Amazon RDS Provisioned IOPS storage with MySQL and Oracle database engines, the maximum size RDS volume you can have by default is 6TB
+31. In RDS,the maximum size for a Microsoft SQL Server DB instance with SQL server express edition is 10GB.
+32. By default, customers are allowed to have up to a total of 40 Amazon RDS DB instances. Of those 40, up to 10 can be Oracle or SQL Server DB instances under the "License Included" model. All 40 can be used for Amazon Aurora, MySQL, MariaDB, PostgreSQL and Oracle or SQL Server under the "BYOL" model. If your application requires more DB instances, you can request additional DB instances
+33. SQS Messages can contain upto 256KB of text in any format
+34. A standard SQS queue lets you have nearly unlimited number of transactions per second
+35. FIFO queues are limited to 300 transactions per second (TPS)
+36. Messages can be kept in the SQS queue from 1 minute to 14 days.The default is 4 days.
+37.  Maximum visibility timeout is 12 hours.So if you have jobs/processes that last more than 12 hours, SQS may not be the service u could use.
+38. SWF retention is upto 1 year for workflow executions.
+39. In Knesis streams you can retain data produced by producers for 24 hours by default.But the retention period can be increased upto 7 days
+40. At present , by default u can have 20 linked accounts under one paying account.
+41. Direct Connects are available in 
+		41.1 10gbps
+		41.2 1gbps
+		41.3 Sub 1gbps can be purchased through AWS Direct Connect Partners
+42. The AWS platform consists of 14 regions currently		
