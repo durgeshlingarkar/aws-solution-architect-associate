@@ -1,0 +1,43 @@
+SA-PRO
+
+Cloud Migration & Hybrid
+
+VPC & CIDR 
+
+- When you create a subnet, you create a CIDR block for the subnet. The allowed block size is between /28 netmask and /16 netmask. 
+- If you create more than one subnet in a VPC, the CIDR blocks of the subnets must not overlap.
+- 5 IP addressed are always reserved per CIDR block. Following are the reseved IP addresses for CIDR block 10.0.0.0/24
+	- 10.0.0.0 - Network address
+	- 10.0.0.1 - Reserved by AWS for VPC router.
+	- 10.0.0.2 - Reserved by AWS for mapping to Amazon provided DNS.
+	- 10.0.0.3 - Reserved by AWS for future use.
+	- 10.0.0.255 - Network broadcast address. AWS does not support broadcast in a VPC, therefore they reserve this address.
+	
+	
+
+VPN to Direct Connect Migrations. 
+
+- Most customers will have site-to-site VPN tunnel from their location to AWS. But as traffic gets heavier, they will opt to use direct connect.
+- Once direct connect is installed, you should configure it so that your VPN connection & your direct connect connection are within the same BGP community. You then configure BGP, so that your VPN connection has a higher cost than the Direct connect connection. 
+
+
+Networking Components
+
+Elastic Network Interfaces
+
+- An elastic network interface (referred to as a network interface in this documentation) is a virtual network interface that can include the following attributes:
+
+	- a primary private IPv4 address
+	- one or more secondary private IPv4 addresses
+	- one Elastic IP address per private IPv4 address
+	- One public IPv4 address, which can be auto-assigned to the network interface for eth0 when you launch an instance
+	- one or more IPv6 addresses
+	- one or more security groups
+	- a MAC address
+	- a source/destination check flag
+	- a description
+	
+- You can create a network interface, attach it to an instance, detach it from an instance, and attach it to another instance.
+- Each instance in your VPC has a default network interface (the primary network interface) that is assigned a private IPv4 address from the IPv4 address range of your VPC. You cannot detach a primary network interface from an instance.
+- You can create and attach an additional network interface to any instance in your VPC. The number of network interfaces you can attach varies by instance type.
+	
