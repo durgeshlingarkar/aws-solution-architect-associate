@@ -1,6 +1,28 @@
 SA-PRO
 
-Cloud Migration & Hybrid
+Domain 8 - Cloud Migration & Hybrid
+
+- VCenter has a pluggin that enables you to migrate VMware VMs to Amazon EC2 and manage AWS resources from within VCenter.
+- Usecases for this are 
+	- Migrate VMWare VMs to Amazon EC2
+	- Reach new geographies from VCenter
+	- Self service AWS portal within VCenter
+	- Leverage VCenter experience while getting started with AWS.
+	
+- Use Storage gateway to migrate your existing VMs to AWS
+- To ensure snapshots are consistent, power down your VM and then take the snapshot in offline mode.
+
+- Data Pipeline
+	- Data pipeline is a webservice that helps you to process or move data between different AWS compute and storage services.
+	- Can be ingerated with on premises environment
+	- Can be scheduled
+	- Data pipeline will provision and terminate resources as and when required. 
+	- A lot of data pipeline's functionality is replaced by LAMBDA
+	- A data pipeline consists of 
+		- Datanode : where you are gonna store the data.
+		- Activity : Any activity to process/move data
+		- Precondition : Conditions or filter to trigger activity
+		- Schedule : Schedule for activity to run
 
 VPC & CIDR 
 
