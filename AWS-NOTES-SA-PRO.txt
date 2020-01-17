@@ -62,4 +62,30 @@ Elastic Network Interfaces
 - You can create a network interface, attach it to an instance, detach it from an instance, and attach it to another instance.
 - Each instance in your VPC has a default network interface (the primary network interface) that is assigned a private IPv4 address from the IPv4 address range of your VPC. You cannot detach a primary network interface from an instance.
 - You can create and attach an additional network interface to any instance in your VPC. The number of network interfaces you can attach varies by instance type.
+
+
+Domain 7 : Scalability & Elasticity
+
+Cloudfront 
+
+- is used to deliver entire website, including dynamic, static, streaming and interactive content using a global network of edge locations. 
+- Requests for contents are automaticallu routed to the nearest edge location, so content is delivered with best possible performance. Cloudfront is optimized to work with with other webservices like S3, EC2, ELB & Route53. 
+- 2 types of distributions 
+	- Web Distribution - Streams HTTP protocol
+	- RTMP - Streams RTMP protocol
+- Geo restriction also called as Geo blocking lets you choose the countries where you want to restrict access to your content. 
+- Whitelists or Blacklists particular countries using either API or console. 
+- Viewers from blacklisted countries will see HTTP 403 error. You can also create custom error pages. 
+- Cloudfront supports GET, HEAD, POST, PUT, PATCH, DELETE and OPTIONS.
+- It does not cache responses to POST, PUT, PATCH, DELETE requests, these requests are proxied back to origin server. 
+- You can use both HTTP & HTTPS with cloudfront. 
+- With SSL, you can use the default cloudfront URL or ur custom URL with your own certificate.
+- For custom URL with your own certificates there are 2 ways 
+	- Dedicated IP custom SSL : Allocated dedicated IP addresses to serve your SSL content to each cloudfront edge location. Very expensive. $600 USD per certificate per month. However, will support older browsers. 
+	- SNI custom SSL : Relies on SNI (Server Name Indication) extenstion of transport layer security protocol, which allows multiple domains to serve SSL traffic over  the same IP address by including the hostname, viewers are trying to connect to. Older browsers won't support it. 
+- CNAME : You can have 100 CNAMES aliases to each distribution. Cloudfront supports wildcard CNAMES. 
+- Invalidations Requests : There are multuiple options for removing a file from the edge locations. You can simple delete the file from your origin and as content in the edge locations reaches the expiration period defined in the each object's HTTP header, it will be removed. If there is offensive or potentially harmful material that needs to be removed before the expiration then you can use Invalidation API to remove the object from all cloudfront edge locations. 
+- Zone APEX Support : Using Route53, AWS's authoritative DNS service, you can configure an 'Alias' record that lets you map the apex or root (example.com) of your DNS name to your AMAZON Cloudfront distribution. Eg http://example.com --> http://d12878rt.cloudfront.net . Route53 will then respond to each request with the right IP addresses for your Cloudfront distribution. Route53 doesn't charge for queries to Alias records that are mapped to a cloudfront distribution. 
+- Dynamic content support : Cloudfront supports delivery of dynamic content that is customized or personalized using HTTP cookies. To use this feature, you specify whether you want cloudfront to forward some or all cookies to ur custom origin server. cloudfront that considers the forwarded cookie values when identifying a unique object in it's cache. This way you end users get both the benefit of content that is personalized just for them with a cookie and the performance benefits of cloudfront. You can optionally choose to log the cookie values in cloudfront access logs. 
+
 	
