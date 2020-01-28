@@ -135,11 +135,14 @@ Kinesis Streams
 			- Amazon Kinesis Agent
 				- Prebuilt java application you can install on your linux devices. 
 		- Shards
-			- A shard is simply the unit of measurement of data when reffering to Kinesis. One shard provides a capacity of 1MB/Sec data input and 2MB/Sec data output. 
+			- A shard is simply the unit of measurement of data when reffering to Kinesis. One shard provides a capacity of 1MB/Sec data input and 2MB/Sec data output. One shard can support upto 1000 PUT records per second. You will specify the number of shards needed when you create a stream. For example, you can create a stream with 2 shards. This stream has a throughput of 2MB/sec data input and 4MB/sec data output, and allows upto 2000 PUT records per second. You can dynamically add or remove. shards from your stream as your data throughput changes via resharding.
 		- Records
 			- Sequence Number
+				- Each data record has a unique sequence number. Think of it as a unique key. The sequence number is assigned by streams after you write to the stream with client.PutRecord or client.PutRecords .You cant use sequence number to logically seperate data in terms of what shards they have come from - you can only do this using partition keys.
 			- Partition Key
+				- Kinesis streams can consist of many different shards. You can group the data by shard by using a partition key. Essentinally, the partion key tells you which shard the data belongs to. A partition key is specified by the applications putting the data into the stream. 
 			- Data Itself(Blob)
+				- Data blobs are the data your producer adds to the stream. The maximum size of a data blob (the data payload after base-64 decoding) is 1MB.
 		- Data Consumers (Kinesis Streams Applications)
 		- Data is stored for 24 hours by defaut within streams. This can be increased upto 7 days.
 		- Use S3, Redshift etc to store processed data for longer term. Kinesis streams is not persistent storage.
