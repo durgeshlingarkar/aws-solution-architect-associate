@@ -102,6 +102,47 @@ Cloudfront
 - Usecase for field level encryption 
 	- Many web applications collect sensitive data such as credit card numbers from users that is then processed by application services running on the origin infrastructure. All these web applications use SSL/TLS encryption between the end user and CloudFront, and between CloudFront and your origin. Now, your origin could have multiple micro-services that perform critical operations based on user input. However, typically sensitive information only needs to be used by a small subset of these micro-services, which means most components have direct access to these data for no reason. A simple programming mistake, such as logging the wrong variable could lead to a customer’s credit card number being written to a file.With field-level encryption, CloudFront’s edge locations can encrypt the credit card data. From that point on, only applications that have the private keys can decrypt the sensitive fields. So the order fulfillment service can only view encrypted credit card numbers, but the payment services can decrypt credit card data. This ensures a higher level of security since even if one of the application services leaks cipher text, the data remains cryptographically protected.
 - Amazon CloudFront has an optional private content feature. When this option is enabled, Amazon CloudFront will only deliver files when you say it is okay to do so by securely signing your requests. 
-- 
+
+
+Elasticache 
+	- Memchached
+	- Use Memcached if 
+		- You want the simplest model possible. 
+		- You need to run large nodes with multiple cores or threads. 
+		- You need the ability to scale out, adding and removing nodes as demand on your system increases or decreases. 
+		- You want to shard your data across multiple nodes. 
+		- You need to cache objects, such as a database.
+		
+	- Redis
+	- Use Redis if
+		- You want complex data types such as strings, hashes, lists and sets. 
+		- You want to sort or rank in-memory data-sets. 
+		- You want persistence of your key store. 
+		- You want to replicate your data from the primary to one or more read replicas for availability. 
+		- You need automatic failover if any one of your primary nodes fail.
+		- You want publish and subscribe (pub/sub) capabilities - the client being informed of events on the server.
+		- You want backup and restore capabilities.
+		
+Kinesis Streams
+	- Kinesis stream enables you to build custom applications that process or analyze streaming data for specialized needs.You can continously add various types of data, such as clickstreams, application logs, and social media to an Amazon Kinesis Stream from hundreds of thousands of sources. Within seconds, the data will be available for your Amazon Kinesis applications to read and process from the stream.
+	- Key concepts
+		- Data producers can produce data using
+			- Amazon Kinesis Streams API
+				- PutRecord (Single data record)
+				- PutRecords (Multiple data record)
+			- Amazon Kinesis Producer Library (KPL)
+				- On GitHub. By using KPL, customers do not need to develope the same logic every time they create a new application for data ingestion.
+			- Amazon Kinesis Agent
+				- Prebuilt java application you can install on your linux devices. 
+		- Shards
+			- A shard is simply the unit of measurement of data when reffering to Kinesis. One shard provides a capacity of 1MB/Sec data input and 2MB/Sec data output. 
+		- Records
+			- Sequence Number
+			- Partition Key
+			- Data Itself(Blob)
+		- Data Consumers (Kinesis Streams Applications)
+		- Data is stored for 24 hours by defaut within streams. This can be increased upto 7 days.
+		- Use S3, Redshift etc to store processed data for longer term. Kinesis streams is not persistent storage.
+		
 
 	
