@@ -276,6 +276,30 @@ Domain 6 - Security
 				- You understand the costs for your increased resiliency and already what techniques to employ when you come under attack.
 				- You know who to contact when an attack happens. 
 				
+	
+	- IDS : An Intrusion Detection System inspects all inbound and outbound network activity and identifies suspicious patterns that may indicate a network or system attack from someone attempting to break into, or compromise, a system.
+	
+	- IPS : An Intrusion Prevention System is a network security or threat prevention technology that examines the network traffic flows to detect and prevent vulnerability exploits. 
+	
+	- To implement IDS/IPS 
+		- Generally, you have an applicance in public subnet, and then agents installed on each EC2 instance in private subnet. 
+		- These agents sends data to applicances which perform analysis on the data.
+		- Logs files are then sent to SOC (Security Operation Centre) or stored in S3 by appliances in public subnet. 
 			
 			
+Domain 5 - Data Storage
+	- Optimizing S3
+		- Optimizing for PUTS
+			- There are 2 different types of network scenarios.
+				- Strong internet connection with fast speeds (such as fibre)
+				- Less reliable internet connection with inconsistent network performance. 
+			- How can we optimize ?
+				- For strong networks, we want to take advantage of the network itself and make the network the bottleneck.
+				- For weaker networks, we want to prevent large files having to restart their uploads.
+		- Parallelizing for PUTs
+			- By dividing your files into small parts and then uploading those parts simultaneously, you are parallelizing your puts. 
+			If one part fails, it can be restarted and there are fewer large restarts on an unreliable network.
+			- Moves the bottleneck to the network itself, which can help increase the aggregrate throughput. 
+			- 20-50 MB on high bandwidth networks, and around 10 MB on mobile networks. 
+			- Need to find balance as too many uploads increases the connection overhead, too few doesn't give your resiliency. 
 		- 
