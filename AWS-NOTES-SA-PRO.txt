@@ -302,4 +302,39 @@ Domain 5 - Data Storage
 			- Moves the bottleneck to the network itself, which can help increase the aggregrate throughput. 
 			- 20-50 MB on high bandwidth networks, and around 10 MB on mobile networks. 
 			- Need to find balance as too many uploads increases the connection overhead, too few doesn't give your resiliency. 
+	
+		- Optimizing for GETs
+			- Use Cloudfront
+				- Muliple Endpoints Globally
+				- Low Latency
+				- High transfer speeds available.
+				- Caches objects from S3
+				- Two varities 
+					- RTMP 
+					- Web Distribution
+			- Parallelizing for GETs
+				- Need to use Range Based GETs to get multi threaded performance. 
+				- Using the Range HTTP header in a GET request, you can retrieve a specific range of bytes in an object stored in Amazon S3. 
+				- Allows you to send multiple GETs at once, hence parallelizing for GETs
+				- Compensates for unreliable network performances. 
+				- Maximizes bandwidth throughput. 
+			
+			- S3 is lexicographical
+				- Introduce randomness while naming buckets or objects in S3 to take advantage of vast S3 area.
+				
+			- S3 Versioning 
+				- Allows you to protect your files from being accidently deleted or overwritten. No penalty on performance coz of versioning. 
+				- Every time you upload a new file, a new version is created automatically. 
+				- Makes it easy to retrieve deleted versions. 
+				- Makes it easy to rollback to previous version. 
+				- Once you turn versioning on you cannot turn it off, you can only suspend it. 
+				- You can use bucket policies to stop people from deleting data from your bucket. 
+				- You can use MFA to delete objects permanently. 
+				- You can use MFA to change the state of versioning within your bucket. 
+				- Versioning will protect you on an individual file level .
+				- Does not protects you against deleting a bucket. 
+				- Bucket delettion can be either malicious or accidental. 
+				- Back your bucket up to another bucket owned by another account using cross account access. 
+				
+					
 		- 
