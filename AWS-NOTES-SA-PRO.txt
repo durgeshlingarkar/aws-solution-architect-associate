@@ -219,3 +219,63 @@ Domain 6 - Security
 		- CloudTrail can be used across multiple accounts in a single S3 bucket. (You can dump your cloudtrail logs from all accounts into that one bucket)
 		
 		- Cloudwatch supports Cross Account Subscriptions (you can monitor multiple accounts in a single cloudwatch)
+		
+	- Cloud Hardware Security Modules (HSM)
+		- HSM stands for Hardware Security Module, and is a physical device that safegaurds and manages digital keys for strong authentication and provides crypto processing. These modules traditionally come in the form of a plug-in card or an external device that attaches directly to a computer or a network server.
+		- HSM is single tenanted (1 physical device, for you only)
+		- Must be used within a VPC
+		- You can use VPC peering to connect to HSM
+		- You can use EBS volume encryption, S3 Object encryption, and key management with HSM, but this does require custom application scripting. 
+		- If you need fault tolerance, you need to build a cluster, so you will need 2. If you have only 1 and if it fails, you will lose your keys.
+		- Can integrate with RDS as well as Redshift. 
+		- You can monitor HSM via Syslog.
+		
+	- DDOS (Distributed Denial of Service)
+		- It is an attack that attempts to make your website or application unavailable to your end users. 
+		- This can be achieved by multiuple mechanisms like 
+			- Large packet floods.
+			- By using combination of refelction and amplification techniques.
+				- Amplification/Reflection attacks can include things such as NTP, SSDP, DNS, Chargen, SNMP attacks, etc. and is where an attacker may send a third party server (such as a NTP server) a request using a spoofed IP address. The server will then respond to that request with a greater payload than initial request (usually 28 * 54 times larger than the request) to the spoofed IP address. This means that if an attacker sends a packet with a spoofed IP address of 64 bytes, the NTP server would respond with up to 3456 bytes of traffic. Attacker can co ordinate this and use multiple NTP servers a second to send legitimate NTP traffic to the target. 
+			- By using large botnets.
+			
+		- How to mitigate DDOS 
+			- Minimize the attack surface area.
+				- Some production environmnets has multiple entry points into them. Perhaps they allow directy SSH/RDP access to their web/application/DB servers for management. 
+				- This can be minimized by using a bastion/jump box that only allows access to specific white listed IP addresses to these bastion servers and move the web/application/DB servers into private subnets. 
+				- By minimizing the attack surface area, you are limiting your exposure to just a few hardened entry points. 
+				
+			- Be Ready to scale to absorb the attack.
+				- The Key strategy behind DDOS attack is to bring your infrastructure to a breaking point. This strategy assumes one thing: that you can't scale to meet the attack. 
+				- The easiest way to defeat this strategy is to design your infrastructure to scale as and when it is needed. You can scale both horizontly or vertically. 
+				- Scaling has following benefits 
+					- The attack is spread over larger area. 
+					- Attackers then have to counter attack, taking up more of their resources. 
+					- Scaling buys you time to analyze the attack and to respond with appropriate counter measures. 
+					- Scaling has the added benefit of providing you with additional levels of redundancy. 
+					
+			- Safegaurd exposed resources.
+				- In situation where you cannot eliminate internet entry points to your applications, you will need to take additional measures to restrict access and protect those entry points without interrupting legitimate end user traffic. 
+				- Three resources that can provide this control and flexibility are Cloudfront, Route53 and WAFs.
+					- Cloudfront 
+						- Geo Restriction/Blocking : Restrict access to users in specific countries (Using whitelists or blacklists)
+						- Origin Access Identity : Restrict access to your S3 bucket so that people can only access S3 using Cloudfront URLs.
+					- Route53 
+						- Alias Record Sets : You can use these immediately redirect your traffic to an amazon cloudfront distribution, or to a different ELB with higher capacity EC2 servers running WAFs or your own security tools. No DNS change and no need to worry about propagation. 
+						- Private DNS : Allows you to manage internal DNS names for your application resources (web servers, application servers, database servers etc) without exposing this information to public internet.
+						
+					
+			- Learn normal behaviour.
+				- Be aware of normal and unsual behaviour. Know the different types of traffic and what normal levels of this traffic should be. 
+				- Understand expected and unexpected resource spikes. 
+				- Knowing normal behaviour allows you to spot abnormalities fast.
+				- You can create alarms to alert you of normal behaviour. 
+				- Helps you to create forensic data to understand the attack. 
+				
+			- Create a plan for attacks.
+				- Having a plan ensures you have validated the design of your architecture. 
+				- You understand the costs for your increased resiliency and already what techniques to employ when you come under attack.
+				- You know who to contact when an attack happens. 
+				
+			
+			
+		- 
